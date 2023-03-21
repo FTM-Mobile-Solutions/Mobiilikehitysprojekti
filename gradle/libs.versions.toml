@@ -1,0 +1,3 @@
+[plugins]
+# https://github.com/korlibs/korge-plugins/releases
+korge = { id = "com.soywiz.korge", version = "3.3.0" }
