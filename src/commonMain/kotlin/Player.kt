@@ -17,16 +17,20 @@ class Player : Container() {
         state = State.LOAD
         val playerBitmap = loadImage("player.png")
         val image = image(playerBitmap) {
-            //position(50,50)
+            //position(500,500)
         }
+        println(state)
     }
 
     fun live() {
         state = State.LIVE
+        println(state)
+        state = State.MOVING
     }
 
     fun moving() {
         state = State.MOVING
+        println(state)
     }
 
     fun hurt() {
