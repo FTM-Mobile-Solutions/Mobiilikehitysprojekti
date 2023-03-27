@@ -1,0 +1,3 @@
+class Level {
+    // Leveleiden muodostaminen
+}
