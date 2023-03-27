@@ -27,6 +27,7 @@ class GameScene : Scene() {
         player.position(views.virtualWidth / 2, views.actualHeight / 2)
         addChild(player)
 
+
         addUpdater { update(it) }
     }
 
@@ -35,10 +36,27 @@ class GameScene : Scene() {
         player.live()
     }
 
+    private fun getG(): Double {
+        val gravity = 5000.0
+        return gravity
+    }
+
+    private fun getV(): Double {
+        var velocityY = 0.0
+        return velocityY
+    }
+
+
     private fun update(dt: TimeSpan) {
         checkInput(dt)
     }
     private fun checkInput(dt: TimeSpan) {
+
+        var g = getG()
+        var vel = getV()
+
+        vel += g * dt.seconds
+        player.y += vel * dt.seconds
 
         if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
             if (views.input.keys[Key.LEFT]) {
@@ -46,6 +64,9 @@ class GameScene : Scene() {
             }
             if (views.input.keys[Key.RIGHT]) {
                 if (player.x > fieldMargin) player.x += player.moveSpeed * dt.seconds
+            }
+            if (views.input.keys[Key.SPACE]) {
+                if (player.y > fieldMargin) player.y -= player.moveSpeed * dt.seconds
             }
         }
     }
