@@ -1,4 +1,7 @@
+import com.soywiz.korau.sound.*
 import com.soywiz.korge.view.*
+import com.soywiz.korio.async.*
+import com.soywiz.korio.file.std.*
 
 class Player : Container() {
 
@@ -21,6 +24,17 @@ class Player : Container() {
         }
         println(state)
     }
+
+    suspend fun getVoice(): Sound {
+        return resourcesVfs["konaa.wav"].readSound()
+    }
+
+    suspend fun konaSound() {
+        val playerVoice = getVoice()
+        playerVoice.volume = 0.1 // sets the volume to 10%
+        playerVoice.play()
+    }
+
 
     fun live() {
         state = State.LIVE

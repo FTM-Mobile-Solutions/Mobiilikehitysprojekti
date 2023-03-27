@@ -7,6 +7,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.format.*
+import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
 class GameScene : Scene() {
@@ -22,12 +23,19 @@ class GameScene : Scene() {
             smoothing = false
         }
 
+
         val solidRect = solidRect(width = 100.0, height = 40.0, color = Colors.GREEN).xy(views.virtualWidth / 2, 145)
 
         player = Player()
         player.load()
         player.position(views.virtualWidth / 2, views.actualHeight / 2)
         addChild(player)
+
+        //camera adjust, not working currently
+        val camera = fixedSizeContainer(width, height)
+        addChild(camera)
+        camera.addChild(player)
+
 
 
         addUpdater { update(it) }
@@ -69,6 +77,9 @@ class GameScene : Scene() {
             }
             if (views.input.keys[Key.SPACE]) {
                 if (player.y > fieldMargin) player.y -= player.moveSpeed * dt.seconds
+                launch {
+                    player.konaSound()
+                }
             }
         }
     }
