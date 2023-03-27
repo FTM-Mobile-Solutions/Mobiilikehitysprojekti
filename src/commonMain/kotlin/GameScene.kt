@@ -4,6 +4,7 @@ import com.soywiz.korev.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
+import com.soywiz.korim.bitmap.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
@@ -11,12 +12,13 @@ import com.soywiz.korio.file.std.*
 class GameScene : Scene() {
     private val fieldMargin = 15
 
-    private lateinit var bg: Image
+    private lateinit var bg: Bitmap
     private lateinit var player: Player
 
     override suspend fun SContainer.sceneInit() {
 
-        bg = image(resourcesVfs["testibg.png"].readBitmap()) {
+        bg = loadImage("testibg.png")
+        val image = image(bg) {
             smoothing = false
         }
 
