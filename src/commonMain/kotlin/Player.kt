@@ -19,9 +19,7 @@ class Player : Container() {
     suspend fun load() {
         state = State.LOAD
         val playerBitmap = loadImage("player.png")
-        val image = image(playerBitmap) {
-            //position(500,500)
-        }
+        val image = image(playerBitmap)
         println(state)
     }
 
@@ -30,9 +28,9 @@ class Player : Container() {
     }
 
     suspend fun konaSound() {
-        val playerVoice = getVoice()
-        playerVoice.volume = 0.1 // sets the volume to 10%
-        playerVoice.play()
+//        val playerVoice = getVoice()
+//        playerVoice.volume = 0.1 // sets the volume to 10%
+//        playerVoice.play()
     }
 
 

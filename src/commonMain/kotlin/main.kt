@@ -27,6 +27,10 @@ object MainModule : Module() {
         get() = GameScene::class
     override val title: String
         get() = "Konapeli"
+    override val size: SizeInt
+        get() = SizeInt(1280, 720)
+    override val scaleMode: ScaleMode
+        get() = ScaleMode.COVER
     override val windowSize: SizeInt
         get() = SizeInt(1280, 720)
     override val bgcolor: RGBA
