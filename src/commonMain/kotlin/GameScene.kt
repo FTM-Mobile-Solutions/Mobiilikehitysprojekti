@@ -1,14 +1,9 @@
 import com.soywiz.klock.*
-import com.soywiz.korau.sound.*
 import com.soywiz.korev.*
 import com.soywiz.korge.scene.*
-import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.*
-import com.soywiz.korim.color.*
-import com.soywiz.korim.format.*
 import com.soywiz.korio.async.*
-import com.soywiz.korio.file.std.*
 
 class GameScene : Scene() {
     private val fieldMargin = 15
@@ -20,8 +15,8 @@ class GameScene : Scene() {
     private lateinit var groundHitbox: SolidRect
     private lateinit var platformHitbox: SolidRect
 
-    private var  gravity = 7000.0
-    private var  velocityY = 0.0
+    private var gravity = 7000.0
+    private var velocityY = 0.0
 
     override suspend fun SContainer.sceneInit() {
 
@@ -48,6 +43,12 @@ class GameScene : Scene() {
             position(720, 350)
         }
 
+        val flagimage = image(loadImage("goal.png")) {
+            position(1100, 315)
+            smoothing = false
+        }
+
+        addChild(flagimage)
         addChild(platformHitbox)
         addChild(groundHitbox)
         player = Player()
@@ -59,8 +60,6 @@ class GameScene : Scene() {
 //        val camera = fixedSizeContainer(width, height)
 //        addChild(camera)
 //        camera.addChild(player)
-
-
 
         addUpdater { update(it) }
     }

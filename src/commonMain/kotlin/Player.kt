@@ -13,7 +13,7 @@ class Player : Container() {
     }
 
     var lives: Int = 3
-    var moveSpeed = 100.0
+    var moveSpeed = 300.0
     lateinit var state: State
 
     suspend fun load() {
