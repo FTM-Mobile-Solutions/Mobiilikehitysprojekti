@@ -9,11 +9,16 @@ class Player : Container() {
         LOAD,
         LIVE,
         MOVING,
+        JUMPING,
         HURT
     }
 
     var lives: Int = 3
     var moveSpeed = 300.0
+    var isOnGround = false
+    private var velocityY = 0.0
+    private val jumpSpeed = -2000.0
+    private val gravity = 5000.0
     lateinit var state: State
 
     suspend fun load() {
@@ -33,6 +38,14 @@ class Player : Container() {
 //        playerVoice.play()
     }
 
+    /*fun getVelocityY(): Double {
+        return velocityY
+    }*/
+
+    /*fun isOnGround(): Boolean {
+        return isOnGround
+    }*/
+
 
     fun live() {
         state = State.LIVE
@@ -47,5 +60,13 @@ class Player : Container() {
 
     fun hurt() {
         state = State.HURT
+    }
+
+    fun jump() {
+        if (isOnGround) {
+            velocityY = jumpSpeed
+            state = State.JUMPING
+            isOnGround = false
+        }
     }
 }

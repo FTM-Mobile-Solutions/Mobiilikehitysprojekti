@@ -53,6 +53,7 @@ class GameScene : Scene() {
         checkInput(dt)
         checkCollisions(dt)
     }
+
     private fun checkInput(dt: TimeSpan) {
         var g = gravity
         var vel = velocityY
@@ -77,20 +78,35 @@ class GameScene : Scene() {
             }
         }
     }
+
+
     private fun checkCollisions(dt: TimeSpan) {
-        if (player.collidesWith(level.groundHitbox)) {
-            if (player.y + player.height > level.groundHitbox.y) {
-                player.y = level.groundHitbox.y - player.height
-            }
+        val isOnGround = player.collidesWith(level.groundHitbox)
+
+        if (isOnGround) {
+            // Set player's y position to just above the ground hitbox
+            player.y = level.groundHitbox.y - player.height
         }
-        for (hitbox in level.platformHitboxes)
-        if (player.collidesWith(hitbox)) {
-            if (player.y + player.height > hitbox.y) {
-                player.y = hitbox.y - player.height
-            }
-            if (player.y - player.height < hitbox.y) { //Gonahtanut logiikka siihen että ei mene alustasta alhaalta läpi
-                player.y = hitbox.y + player.height * 2
+
+        for (hitbox in level.platformHitboxes) {
+            if (player.collidesWith(hitbox)) {
+                val playerTop = player.y
+                val playerBottom = player.y + player.height
+                val playerX = player.y
+                val hitboxTop = hitbox.y
+                val hitboxBottom = hitbox.y + hitbox.height
+                val hitBoxSide = hitbox.x
+
+                if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
+                    // Set player's y position to just below the platform hitbox
+                    player.y = hitboxBottom
+                } else if (playerBottom > hitboxTop && playerTop < hitboxTop) {
+                    // Set player's y position to just above the platform hitbox
+                    player.y = hitboxTop - player.height
+                } else if(playerX == hitBoxSide) // ei toimi oikein vielä
+                    player.x = hitBoxSide - player.height
             }
         }
     }
+
 }
