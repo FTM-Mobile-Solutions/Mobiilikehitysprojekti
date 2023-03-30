@@ -16,7 +16,7 @@ class Player : Container() {
     var lives: Int = 3
     var moveSpeed = 300.0
     var isOnGround = false
-    private var velocityY = 0.0
+    private var velocityY: Double = 0.0
     private var velocityX: Double = 0.0
     private val jumpSpeed = -2000.0
     private val gravity = 5000.0
