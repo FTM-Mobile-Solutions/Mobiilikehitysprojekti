@@ -15,8 +15,8 @@ class GameScene : Scene() {
 //    private lateinit var groundHitbox: SolidRect
 //    private lateinit var platformHitbox: SolidRect
 
-    private var gravity = 5000.0
-    private var velocityY = 100.0
+    private var gravity = 1500.0
+    private var velocityY = 0.0
 
     override suspend fun SContainer.sceneInit() {
         val flagimage = image(loadImage("goal.png")) {
@@ -54,8 +54,8 @@ class GameScene : Scene() {
     }
 
     private fun checkInput(dt: TimeSpan) {
-        var g = gravity
-        velocityY += g * dt.seconds
+
+        velocityY += gravity * dt.seconds
         player.y += velocityY * dt.seconds
         velocityY = minOf(velocityY, 1000.0)
 
@@ -103,16 +103,19 @@ class GameScene : Scene() {
                     player.setVelocityY(0.0)
                 } else if (playerBottom > hitboxTop && playerTop < hitboxTop) {
                     // Set player's y position to just above the platform hitbox
+                    player.jumping = false
                     player.y = hitboxTop - player.height
                     player.setVelocityY(0.0)
                 } else if (playerRight > hitboxLeft && playerLeft < hitboxLeft && playerBottom > hitboxTop && playerTop < hitboxBottom) {
                     // Set player's x position to just left of the platform hitbox
                     player.x = hitboxLeft - player.width
                     player.setVelocityX(0.0)
+                    player.setVelocityY(0.0)
                 } else if (playerLeft < hitboxRight && playerRight > hitboxRight && playerBottom > hitboxTop && playerTop < hitboxBottom) {
                     // Set player's x position to just right of the platform hitbox
                     player.x = hitboxRight
                     player.setVelocityX(0.0)
+                    player.setVelocityY(0.0)
                 }
             }
         }

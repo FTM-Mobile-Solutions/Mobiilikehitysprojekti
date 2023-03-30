@@ -12,8 +12,7 @@ class Level : Container() {
      lateinit var ground: Bitmap
      lateinit var platform: Bitmap
      lateinit var groundHitbox: SolidRect
-    val platformHitboxes = mutableListOf<SolidRect>()
-//     lateinit var platformHitboxes: List<SolidRect>
+     val platformHitboxes = mutableListOf<SolidRect>()
 
     lateinit var state: State
 
@@ -37,7 +36,7 @@ class Level : Container() {
         createplatform(1000, 350)
         createplatform(700, 350)
         createplatform(400, 350)
-        createplatform(100, 350)
+        createplatform(100, 440)
 
     }
 
