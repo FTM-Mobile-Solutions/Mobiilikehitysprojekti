@@ -4,7 +4,7 @@ import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
 class Player : Container() {
-
+    var jumping = false
     enum class State {
         LOAD,
         LIVE,
@@ -14,7 +14,7 @@ class Player : Container() {
     }
 
     var lives: Int = 3
-    var moveSpeed = 300.0
+    var moveSpeed = 500.0
     var isOnGround = false
     private var velocityY: Double = 0.0
     private var velocityX: Double = 0.0

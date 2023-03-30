@@ -7,7 +7,6 @@ import com.soywiz.korio.async.*
 
 class GameScene : Scene() {
     private val fieldMargin = 15
-
 //    private lateinit var bg: Bitmap
 //    private lateinit var ground: Bitmap
 //    private lateinit var platform: Bitmap
@@ -20,7 +19,6 @@ class GameScene : Scene() {
     private var velocityY = 100.0
 
     override suspend fun SContainer.sceneInit() {
-
         val flagimage = image(loadImage("goal.png")) {
             position(1100, 315)
             smoothing = false
@@ -52,14 +50,14 @@ class GameScene : Scene() {
     private fun update(dt: TimeSpan) {
         checkInput(dt)
         checkCollisions(dt)
+        velocityY += gravity * dt.seconds // apply gravity
     }
 
     private fun checkInput(dt: TimeSpan) {
         var g = gravity
-        var vel = velocityY
-
-        vel += g * dt.seconds
-        player.y += vel * dt.seconds
+        velocityY += g * dt.seconds
+        player.y += velocityY * dt.seconds
+        velocityY = minOf(velocityY, 1000.0)
 
         if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
             if (views.input.keys[Key.LEFT]) {
@@ -68,24 +66,24 @@ class GameScene : Scene() {
             if (views.input.keys[Key.RIGHT]) {
                 if (player.x < views.virtualWidth - fieldMargin) player.x += player.moveSpeed * dt.seconds
             }
-            if (views.input.keys[Key.SPACE]) {
-                if (player.y > fieldMargin) {
-                    player.y -= player.moveSpeed * dt.seconds
-                }
-                launch {
-                    player.konaSound()
-                }
+            if (views.input.keys[Key.SPACE] && !player.jumping) {
+                player.jumping = true
+                velocityY = -1000.0
             }
         }
     }
-
 
     private fun checkCollisions(dt: TimeSpan) {
         val isOnGround = player.collidesWith(level.groundHitbox)
 
         if (isOnGround) {
-            // Set player's y position to just above the ground hitbox
             player.y = level.groundHitbox.y - player.height
+            player.jumping = false // reset jumping flag
+        }
+        if (player.y > views.virtualHeight) {
+            player.position(views.virtualWidth / 2, views.virtualHeight / 2)
+            velocityY = 100.0
+            return
         }
 
         for (hitbox in level.platformHitboxes) {
@@ -119,5 +117,4 @@ class GameScene : Scene() {
             }
         }
     }
-
 }
