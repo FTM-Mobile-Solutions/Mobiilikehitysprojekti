@@ -72,7 +72,6 @@ class GameScene : Scene() {
             }
         }
     }
-
     private fun checkCollisions(dt: TimeSpan) {
         val isOnGround = player.collidesWith(level.groundHitbox)
 
@@ -101,6 +100,7 @@ class GameScene : Scene() {
                     // Set player's y position to just below the platform hitbox
                     player.y = hitboxBottom
                     player.setVelocityY(0.0)
+                    player.y = +470.0
                 } else if (playerBottom > hitboxTop && playerTop < hitboxTop) {
                     // Set player's y position to just above the platform hitbox
                     player.jumping = false
@@ -120,4 +120,7 @@ class GameScene : Scene() {
             }
         }
     }
+
+
+
 }
