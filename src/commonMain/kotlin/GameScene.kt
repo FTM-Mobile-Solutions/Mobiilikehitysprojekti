@@ -92,19 +92,30 @@ class GameScene : Scene() {
             if (player.collidesWith(hitbox)) {
                 val playerTop = player.y
                 val playerBottom = player.y + player.height
-                val playerX = player.y
+                val playerLeft = player.x
+                val playerRight = player.x + player.width
                 val hitboxTop = hitbox.y
                 val hitboxBottom = hitbox.y + hitbox.height
-                val hitBoxSide = hitbox.x
+                val hitboxLeft = hitbox.x
+                val hitboxRight = hitbox.x + hitbox.width
 
                 if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
                     // Set player's y position to just below the platform hitbox
                     player.y = hitboxBottom
+                    player.setVelocityY(0.0)
                 } else if (playerBottom > hitboxTop && playerTop < hitboxTop) {
                     // Set player's y position to just above the platform hitbox
                     player.y = hitboxTop - player.height
-                } else if(playerX == hitBoxSide) // ei toimi oikein vielä
-                    player.x = hitBoxSide - player.height
+                    player.setVelocityY(0.0)
+                } else if (playerRight > hitboxLeft && playerLeft < hitboxLeft && playerBottom > hitboxTop && playerTop < hitboxBottom) {
+                    // Set player's x position to just left of the platform hitbox
+                    player.x = hitboxLeft - player.width
+                    player.setVelocityX(0.0)
+                } else if (playerLeft < hitboxRight && playerRight > hitboxRight && playerBottom > hitboxTop && playerTop < hitboxBottom) {
+                    // Set player's x position to just right of the platform hitbox
+                    player.x = hitboxRight
+                    player.setVelocityX(0.0)
+                }
             }
         }
     }

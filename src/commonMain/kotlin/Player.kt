@@ -17,6 +17,7 @@ class Player : Container() {
     var moveSpeed = 300.0
     var isOnGround = false
     private var velocityY = 0.0
+    private var velocityX: Double = 0.0
     private val jumpSpeed = -2000.0
     private val gravity = 5000.0
     lateinit var state: State
@@ -36,6 +37,14 @@ class Player : Container() {
 //        val playerVoice = getVoice()
 //        playerVoice.volume = 0.1 // sets the volume to 10%
 //        playerVoice.play()
+    }
+
+    fun setVelocityX(velocity: Double) {
+        this.velocityX = velocity
+    }
+
+    fun setVelocityY(velocity: Double) {
+        this.velocityY = velocity
     }
 
     /*fun getVelocityY(): Double {
