@@ -15,9 +15,9 @@ class Enemy : Container() {
     private var velocityX: Double = 100.0
 
     suspend fun load() {
-        createEnemy(64, 400)
-        createEnemy(64, 500)
-        createEnemy(64, 600)
+        createBat(64, 400)
+        createBat(64, 500)
+        createBat(64, 600)
     }
     fun setVelocityX(velocity: Double) {
         this.velocityX = velocity
@@ -35,7 +35,7 @@ class Enemy : Container() {
         return velocityY
     }
 
-    suspend fun createEnemy(gx:Int, gy:Int) {
+    suspend fun createBat(gx:Int, gy:Int) {
         enemy = loadImage("enemy.png")
         val enemyBitmap = image(enemy) {
             smoothing = false
