@@ -11,8 +11,6 @@ class GameScene : Scene() {
     private lateinit var player: Player
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
-
-
     private var gravity = 3500.0
     private var velocityY = 0.0
 
@@ -77,17 +75,18 @@ class GameScene : Scene() {
         if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
             if (views.input.keys[Key.LEFT]) {
                 player.x -= player.moveSpeed * dt.seconds
+                if (player.x < 0) player.x = 0.0
             }
             if (views.input.keys[Key.RIGHT]) {
                 player.x += player.moveSpeed * dt.seconds
+                if (player.x > views.virtualWidth - player.width) player.x = views.virtualWidth - player.width
             }
             if (views.input.keys[Key.SPACE] && !player.jumping) {
                 player.jumping = true
                 velocityY = -1000.0
-                }
             }
         }
-
+    }
     private fun checkCollisions(dt: TimeSpan) {
         val isOnGround = player.collidesWith(level.groundHitbox)
 
