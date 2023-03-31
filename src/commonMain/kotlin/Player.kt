@@ -31,9 +31,9 @@ class Player : Container() {
     }
 
     suspend fun konaSound() {
-//        val playerVoice = getVoice()
-//        playerVoice.volume = 0.1 // sets the volume to 10%
-//        playerVoice.play()
+        val playerVoice = getVoice()
+        playerVoice.volume = 0.1 // sets the volume to 10%
+        playerVoice.play()
     }
 
     fun setVelocityX(velocity: Double) {

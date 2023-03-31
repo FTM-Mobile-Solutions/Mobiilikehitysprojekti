@@ -84,6 +84,9 @@ class GameScene : Scene() {
             if (views.input.keys[Key.SPACE] && !player.jumping) {
                 player.jumping = true
                 velocityY = -1000.0
+                launch {
+                    player.konaSound()
+                }
             }
         }
     }
