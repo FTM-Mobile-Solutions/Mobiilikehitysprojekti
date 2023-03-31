@@ -15,8 +15,8 @@ class loadImage {
     suspend fun init() {
         playerImage = loadImage("player.png")
         bgImage = loadImage("testibg.png")
-        groundBitmap = loadImage("platformtest.png")
-        platformBitmap = loadImage("konaplatformtest.png")
+        groundBitmap = loadImage("tiles/bg.png")
+        platformBitmap = loadImage("tiles/platform.png")
 //        floor = loadImage("tiles/floor_green.png")
         floor = loadImage("tiles/floor64.png")
         wall = loadImage("tiles/wall64.png")
