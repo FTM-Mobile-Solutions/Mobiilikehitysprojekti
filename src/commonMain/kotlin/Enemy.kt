@@ -1,29 +1,52 @@
-import com.soywiz.klock.*
-import com.soywiz.korge.view.Circle
-import com.soywiz.korim.color.*
-import kotlin.random.*
+import com.soywiz.korau.sound.*
+import com.soywiz.korge.view.*
+import com.soywiz.korim.bitmap.*
+import com.soywiz.korio.async.*
+import com.soywiz.korio.file.std.*
 
-class Enemy(radius: Double, color: RGBA) : Circle(radius, color) {
+class Enemy : Container() {
 
-    var Espeed = 0
-    var player: Circle? = null
+    lateinit var enemy: Bitmap
+    val enemyHitboxes = mutableListOf<SolidRect>()
+    var lives: Int = 1
+    //var velocityX = 100.0
+    var jumping = false
+    private var velocityY: Double = 30.0
+    private var velocityX: Double = 100.0
 
-    init {
-        // Set a random initial position for the enemy
-        x = 800.0 // The initial x position of the enemy
-        //y = Random.nextDouble(0.0, 600.0) // The initial y position of the enemy
-        y = 256.0
+    suspend fun load() {
+        createEnemy(64, 400)
+        createEnemy(64, 500)
+        createEnemy(64, 600)
     }
-    fun update(dt: TimeSpan) {
-        // Move the enemy towards the left side of the screen
-        x -= Espeed * dt.seconds
+    fun setVelocityX(velocity: Double) {
+        this.velocityX = velocity
+    }
 
-        // Check if the enemy has reached the left edge of the screen
-        if (x < 0.0) {
-            // Reset the enemy's position to a random y position
-            x = 800.0
-            y = 256.0
+    fun getVelocityX(): Double {
+        return velocityX
+    }
+
+    fun setVelocityY(velocity: Double) {
+        this.velocityY = velocity
+    }
+
+    fun getVelocityY(): Double {
+        return velocityY
+    }
+
+    suspend fun createEnemy(gx:Int, gy:Int) {
+        enemy = loadImage("enemy.png")
+        val enemyBitmap = image(enemy) {
+            smoothing = false
+            position(gx, gy)
         }
-
+        val enemyHitbox = solidRect(width = enemy.width, height = enemy.height) {
+            alpha = 0.0
+            position(gx, gy)
+        }
+        enemyHitboxes.add(enemyHitbox)
     }
+
 }
+

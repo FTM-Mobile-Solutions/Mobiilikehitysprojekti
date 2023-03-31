@@ -9,6 +9,7 @@ import com.soywiz.korio.async.*
 class GameScene : Scene() {
     private val fieldMargin = 0
     private lateinit var player: Player
+    private lateinit var enemy: Enemy
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
     private var gravity = 3500.0
@@ -30,11 +31,14 @@ class GameScene : Scene() {
         player.load()
         player.position(views.virtualWidth / 2, 730)
 
+        enemy = Enemy()
+        enemy.load()
 //        addChild(player)
 //        addChild(level)
 
         camera.addChild(level)
         camera.addChild(player)
+        camera.addChild(enemy)
 
         addChild(camera)
 
@@ -50,9 +54,30 @@ class GameScene : Scene() {
         checkInput(dt)
         checkCollisions(dt)
         checkCamerapos(dt)
-
+        enemyMovement(dt)
         velocityY += gravity * dt.seconds // apply gravity
     }
+
+    private fun enemyMovement(dt: TimeSpan) {
+        val enemyVelocityX = enemy.getVelocityX()
+        val enemyVelocityY = enemy.getVelocityY()
+        enemy.x += enemyVelocityX * dt.seconds
+        enemy.y += enemyVelocityY * dt.seconds
+
+        if(enemy.x > 230 && enemyVelocityX > 0){
+            enemy.setVelocityX(-enemyVelocityX)
+        } else if (enemy.x < -20 && enemyVelocityX < 0){
+            enemy.setVelocityX(-enemyVelocityX)
+        }
+
+        if(enemy.y > 10 && enemyVelocityY > 0){
+            enemy.setVelocityY(-enemyVelocityY)
+        } else if(enemy.y < 0 && enemyVelocityY < 0){
+            enemy.setVelocityY(-enemyVelocityY)
+        }
+    }
+
+
 
     private fun checkCamerapos(dt: TimeSpan) {
         //camera.x = -player.x + sceneWidth / 2
@@ -83,7 +108,7 @@ class GameScene : Scene() {
             }
             if (views.input.keys[Key.SPACE] && !player.jumping) {
                 player.jumping = true
-                velocityY = -1000.0
+                velocityY = -1500.0
                 launch {
                     player.konaSound()
                 }

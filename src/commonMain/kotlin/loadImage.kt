@@ -6,6 +6,7 @@ suspend fun loadImage(fileName: String): Bitmap = resourcesVfs[fileName].readBit
 
 class loadImage {
     lateinit var playerImage: Bitmap
+    lateinit var enemyImage: Bitmap
     lateinit var groundBitmap: Bitmap
     lateinit var bgImage: Bitmap
     lateinit var platformBitmap: Bitmap
@@ -14,6 +15,7 @@ class loadImage {
 
     suspend fun init() {
         playerImage = loadImage("player.png")
+        enemyImage = loadImage("enemy.png")
         bgImage = loadImage("testibg.png")
         groundBitmap = loadImage("tiles/bg.png")
         platformBitmap = loadImage("tiles/platform.png")
