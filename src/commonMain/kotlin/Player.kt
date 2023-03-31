@@ -13,7 +13,7 @@ class Player : Container() {
     }
 
     var lives: Int = 3
-    var moveSpeed = 500.0
+    var moveSpeed = 100.0
     var jumping = false
     private var velocityY: Double = 0.0
     private var velocityX: Double = 0.0
@@ -61,6 +61,7 @@ class Player : Container() {
 
     fun moving() {
         state = State.MOVING
+
         println(state)
     }
 
