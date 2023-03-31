@@ -28,7 +28,7 @@ class GameScene : Scene() {
 
         player = Player()
         player.load()
-        player.position(views.virtualWidth / 2, views.virtualHeight / 2)
+        player.position(views.virtualWidth / 2, 730)
 
 //        addChild(player)
 //        addChild(level)
@@ -118,7 +118,7 @@ class GameScene : Scene() {
                     // Set player's y position to just below the platform hitbox
                     player.y = hitboxBottom
                     player.setVelocityY(0.0)
-                    player.y = +470.0
+//                    player.y = +470.0
                 } else if (playerBottom > hitboxTop && playerTop < hitboxTop) {
                     // Set player's y position to just above the platform hitbox
                     player.jumping = false

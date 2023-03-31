@@ -23,13 +23,14 @@ class Level : Container() {
 
     suspend fun level1() {
         state = State.LEVEL_1
-//        bg = loadImage("testibg.png")
-//        val bgimage = image(bg) {
-//            smoothing = false
-//        }
-//        ground = loadImage("tiles/floor_green.png")
+        bg = loadImage("tiles/bg.png")
+        val bgimage = image(bg) {
+            tint = Colors.LIGHTSLATEGREY
+            smoothing = false
+        }
         ground = loadImage("tiles/floor64.png")
         val groundimage = image(ground) {
+//            tint = Colors.LIGHTSLATEGREY
             smoothing = false
             position(0,736)
         }
@@ -41,14 +42,15 @@ class Level : Container() {
             alpha = 0.0
             position(0, 0)
         }
-//        rightwall = loadImage("tiles/wall_green.png")
         rightwall = loadImage("tiles/wall64.png")
         val rightwallimage = image(rightwall) {
+            //tint = Colors.LIGHTSLATEGREY
             smoothing = false
             position(332,-96)
         }
         leftwall = loadImage("tiles/wall64.png")
         val leftwallimage = image(rightwall) {
+            //tint = Colors.LIGHTSLATEGREY
             smoothing = false
             position(-32,-96)
         }
@@ -58,15 +60,14 @@ class Level : Container() {
         }
 
 
-        createplatform(1000, 350)
-        createplatform(700, 350)
-        createplatform(400, 350)
-        createplatform(100, 440)
-
+        createplatform(50, 650)
+        createplatform(200, 550)
+        createplatform(50, 450)
+        createplatform(200, 350)
     }
 
     suspend fun createplatform(gx:Int, gy:Int) {
-        platform = loadImage("konaplatformtest.png")
+        platform = loadImage("tiles/platform.png")
         val platformimage = image(platform) {
             smoothing = false
             position(gx, gy)
