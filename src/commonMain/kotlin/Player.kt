@@ -15,6 +15,8 @@ class Player : Container() {
     var lives: Int = 3
     var moveSpeed = 100.0
     var jumping = false
+    var jumpForce = 0.0
+    var jumpDistance = 0.0
     private var velocityY: Double = 0.0
     private var velocityX: Double = 0.0
     lateinit var state: State

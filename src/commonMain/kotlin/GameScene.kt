@@ -14,13 +14,11 @@ class GameScene : Scene() {
     private lateinit var camera: CameraContainer
     private var gravity = 3500.0
     private var velocityY = 0.0
+    var isOnGround = false
+    var isOnPlatform = false
+    var facingRight = false
 
     override suspend fun SContainer.sceneInit() {
-        val flagimage = image(loadImage("goal.png")) {
-            position(1100, 315)
-            smoothing = false
-        }
-
         camera = cameraContainer(views.virtualWidthDouble,views.virtualHeightDouble)
 
         level = Level()
@@ -55,7 +53,6 @@ class GameScene : Scene() {
         checkCollisions(dt)
         checkCamerapos(dt)
         enemyMovement(dt)
-        velocityY += gravity * dt.seconds // apply gravity
     }
 
     private fun enemyMovement(dt: TimeSpan) {
@@ -82,62 +79,110 @@ class GameScene : Scene() {
     private fun checkCamerapos(dt: TimeSpan) {
         //camera.x = -player.x + sceneWidth / 2
         camera.y = -player.y + sceneHeight / 2
-        if (camera.y != 801.0) {
+        if (player.y > 400.0) {
             camera.y = 0.0
         }
     }
     private fun checkInput(dt: TimeSpan) {
-        if (player.jumping) {
-            player.moveSpeed = 200.0
-        } else {
-            player.moveSpeed = 100.0
-        }
-
         velocityY += gravity * dt.seconds
         player.y += velocityY * dt.seconds
         velocityY = minOf(velocityY, 1000.0)
 
-        if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
-            if (views.input.keys[Key.LEFT]) {
-                player.x -= player.moveSpeed * dt.seconds
-                if (player.x < 50) player.x = 30.0
-                if (player.collidesWith(level.leftwallHitbox)) {
-                    player.x = level.leftwallHitbox.x + level.leftwallHitbox.width
-                }
-            }
-            if (views.input.keys[Key.RIGHT]) {
-                player.x += player.moveSpeed * dt.seconds
-                if (player.x > views.virtualWidth - player.width - 50) player.x = views.virtualWidth - player.width - 30.0
-                if (player.collidesWith(level.rightwallHitbox)) {
-                    player.x = level.rightwallHitbox.x - player.width
-                }
-            }
-            if (views.input.keys[Key.SPACE] && !player.jumping) {
-                player.jumping = true
-                velocityY = -1500.0
-                launch {
-                    player.konaSound()
-                }
-            }
+        if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
+            player.jumping = true
+            facingRight = true
+            player.jumpForce = 500.0
+            player.jumpDistance = 100.0
         }
+
+        if (views.input.keys.pressing(Key.RIGHT) && !player.jumping) {
+            player.jumping = true
+            player.jumpForce += 250 * dt.seconds
+            player.jumpDistance += 100 * dt.seconds
+            if (player.jumpForce >= 1250)
+                player.jumpForce = 1250.0
+            if (player.jumpDistance >= 350)
+                player.jumpDistance = 350.0
+            println("force:"+player.jumpForce)
+            println("distance:"+player.jumpDistance)
+        }
+
+        if (views.input.keys.justReleased(Key.RIGHT) && !player.jumping) {
+            player.jumping = true
+            velocityY = -player.jumpForce
+        }
+
+        if (!isOnGround && facingRight) {
+            player.x += player.jumpDistance * dt.seconds
+        }
+
+        if (!isOnGround && !facingRight) {
+            player.x -= player.jumpDistance * dt.seconds
+        }
+
+        if (views.input.keys.justPressed(Key.LEFT) && !player.jumping) {
+            player.jumping = true
+            facingRight = false
+            player.jumpForce = 500.0
+            player.jumpDistance = 100.0
+
+        }
+
+        if (views.input.keys.pressing(Key.LEFT) && !player.jumping) {
+            player.jumping = true
+            player.jumpForce += 250 * dt.seconds
+            player.jumpDistance += 100 * dt.seconds
+            if (player.jumpForce >= 1250)
+                player.jumpForce = 1250.0
+            if (player.jumpDistance >= 350)
+                player.jumpDistance = 350.0
+            println("force:"+player.jumpForce)
+            println("distance:"+player.jumpDistance)
+        }
+
+        if (views.input.keys.justReleased(Key.LEFT) && !player.jumping) {
+            player.jumping = true
+            velocityY = -player.jumpForce
+        }
+
+
+
+//        if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
+//            if (views.input.keys[Key.LEFT]) {
+//                player.x -= player.moveSpeed * dt.seconds
+//                if (player.x < 50) player.x = 30.0
+//                if (player.collidesWith(level.leftwallHitbox)) {
+//                    player.x = level.leftwallHitbox.x + level.leftwallHitbox.width
+//                }
+//            }
+//            if (views.input.keys[Key.RIGHT]) {
+//                player.x += player.moveSpeed * dt.seconds
+//                if (player.x > views.virtualWidth - player.width - 50) player.x = views.virtualWidth - player.width - 30.0
+//                if (player.collidesWith(level.rightwallHitbox)) {
+//                    player.x = level.rightwallHitbox.x - player.width
+//                }
+//            }
+//            if (views.input.keys[Key.SPACE] && !player.jumping) {
+//                player.jumping = true
+//                velocityY = -1500.0
+//                launch {
+//                    player.konaSound()
+//                }
+//            }
+//        }
     }
 
 
     private fun checkCollisions(dt: TimeSpan) {
-        val isOnGround = player.collidesWith(level.groundHitbox)
-
+        isOnGround = player.collidesWith(level.groundHitbox)
         if (isOnGround) {
             player.y = level.groundHitbox.y - player.height
             player.jumping = false // reset jumping flag
+            isOnPlatform = false
         }
-//        if (player.y > views.virtualHeight) {
-//            player.position(views.virtualWidth / 2, views.virtualHeight / 2)
-//            velocityY = 100.0
-//            return
-//        }
-
         for (hitbox in level.platformHitboxes) {
-            if (player.collidesWith(hitbox)) {
+            isOnPlatform = player.collidesWith(hitbox)
+            if (isOnPlatform) {
                 val playerTop = player.y
                 val playerBottom = player.y + player.height
                 val playerLeft = player.x
@@ -150,11 +195,11 @@ class GameScene : Scene() {
                 if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
                     // Set player's y position to just below the platform hitbox
                     player.y = hitboxBottom
-                    player.setVelocityY(0.0)
-//                    player.y = +470.0
+                    velocityY = -velocityY / 2
                 } else if (playerBottom > hitboxTop && playerTop < hitboxTop) {
                     // Set player's y position to just above the platform hitbox
                     player.jumping = false
+                    isOnGround = true
                     player.y = hitboxTop - player.height
                     player.setVelocityY(0.0)
                 } else if (playerRight > hitboxLeft && playerLeft < hitboxLeft && playerBottom > hitboxTop && playerTop < hitboxBottom) {
