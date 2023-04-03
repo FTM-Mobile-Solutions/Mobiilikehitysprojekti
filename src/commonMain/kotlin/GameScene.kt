@@ -89,7 +89,7 @@ class GameScene : Scene() {
     private fun checkInput(dt: TimeSpan) {
         if (player.jumping) {
             player.moveSpeed = 200.0
-        }else{
+        } else {
             player.moveSpeed = 100.0
         }
 
@@ -100,11 +100,17 @@ class GameScene : Scene() {
         if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
             if (views.input.keys[Key.LEFT]) {
                 player.x -= player.moveSpeed * dt.seconds
-                if (player.x < 0) player.x = 0.0
+                if (player.x < 50) player.x = 30.0
+                if (player.collidesWith(level.leftwallHitbox)) {
+                    player.x = level.leftwallHitbox.x + level.leftwallHitbox.width
+                }
             }
             if (views.input.keys[Key.RIGHT]) {
                 player.x += player.moveSpeed * dt.seconds
-                if (player.x > views.virtualWidth - player.width) player.x = views.virtualWidth - player.width
+                if (player.x > views.virtualWidth - player.width - 50) player.x = views.virtualWidth - player.width - 30.0
+                if (player.collidesWith(level.rightwallHitbox)) {
+                    player.x = level.rightwallHitbox.x - player.width
+                }
             }
             if (views.input.keys[Key.SPACE] && !player.jumping) {
                 player.jumping = true
@@ -115,6 +121,8 @@ class GameScene : Scene() {
             }
         }
     }
+
+
     private fun checkCollisions(dt: TimeSpan) {
         val isOnGround = player.collidesWith(level.groundHitbox)
 
