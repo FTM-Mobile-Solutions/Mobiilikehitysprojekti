@@ -38,10 +38,6 @@ class Level : Container() {
             alpha = 0.0
             position(0, 736)
         }
-        leftwallHitbox = solidRect(width = ground.width, height = ground.height) {
-            alpha = 0.0
-            position(0, 0)
-        }
         rightwall = loadImage("tiles/wall64.png")
         val rightwallimage = image(rightwall) {
             //tint = Colors.LIGHTSLATEGREY
@@ -54,9 +50,13 @@ class Level : Container() {
             smoothing = false
             position(-32,-96)
         }
-        rightwallHitbox = solidRect(width = ground.width, height = ground.height) {
+        leftwallHitbox = solidRect(width = leftwall.width, height = leftwall.height) {
             alpha = 0.0
-            position(344, 0)
+            position(-32, -96)
+        }
+        rightwallHitbox = solidRect(width = rightwall.width, height = rightwall.height) {
+            alpha = 0.0
+            position(332, -96)
         }
 
 

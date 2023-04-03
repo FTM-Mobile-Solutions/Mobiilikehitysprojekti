@@ -144,9 +144,6 @@ class GameScene : Scene() {
             player.jumping = true
             velocityY = -player.jumpForce
         }
-
-
-
 //        if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
 //            if (views.input.keys[Key.LEFT]) {
 //                player.x -= player.moveSpeed * dt.seconds
@@ -215,5 +212,12 @@ class GameScene : Scene() {
                 }
             }
         }
+        if (player.collidesWith(level.rightwallHitbox)) {
+                    player.x = level.rightwallHitbox.x - player.width
+        }
+        if (player.collidesWith(level.leftwallHitbox)) {
+                    player.x = level.leftwallHitbox.x + player.width * 2
+        }
     }
 }
+

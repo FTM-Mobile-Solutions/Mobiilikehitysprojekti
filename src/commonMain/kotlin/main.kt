@@ -24,7 +24,7 @@ suspend fun main() = Korge(Korge.Config(module = MainModule))
 
 object MainModule : Module() {
     override val mainScene: KClass<out Scene>
-        get() = SplashScreen::class
+        get() = GameScene::class
     override val title: String
         get() = "Konapeli"
     override val size: SizeInt
