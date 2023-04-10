@@ -1,10 +1,12 @@
 import com.soywiz.klock.*
+import com.soywiz.korau.sound.*
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.format.*
+import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
 class GameOver: Scene() {
@@ -40,6 +42,9 @@ class GameOver: Scene() {
             y += 150
             alpha = 0.0
         }
+        launch {
+            goSound()
+        }
 
         playAgainText.onClick {
             sceneContainer.changeTo<GameScene>()
@@ -62,5 +67,15 @@ class GameOver: Scene() {
         go.tween(go::alpha[0.0], go::scale[0.0], time = .5.seconds)
         playAgainText.tween(playAgainText::alpha[0.0], time = .5.seconds)
         mainMenuText.tween(mainMenuText::alpha[0.0], time = .5.seconds)
+    }
+
+    suspend fun getVoice(): Sound {
+        return resourcesVfs["gameover.wav"].readSound()
+    }
+
+    suspend fun goSound() {
+        val playerVoice = getVoice()
+        playerVoice.volume = 0.1 // sets the volume to 10%
+        playerVoice.play()
     }
 }

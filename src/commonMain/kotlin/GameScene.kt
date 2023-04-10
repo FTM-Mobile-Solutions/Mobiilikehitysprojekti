@@ -12,6 +12,7 @@ class GameScene : Scene() {
     private lateinit var enemy: Enemy
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
+    private lateinit var go: GameOver
     private var gravity = 3500.0
     private var velocityY = 0.0
     var isOnGround = false
