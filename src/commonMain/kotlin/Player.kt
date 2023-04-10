@@ -28,6 +28,12 @@ class Player : Container() {
         println(state)
     }
 
+    fun loseHealth() {
+        lives -= 1
+        // Do something when the player loses health, e.g. play a sound or show a visual effect.
+        println(lives)
+    }
+
     suspend fun getVoice(): Sound {
         return resourcesVfs["konaa.wav"].readSound()
     }

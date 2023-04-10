@@ -17,6 +17,7 @@ class GameScene : Scene() {
     var isOnGround = false
     var isOnPlatform = false
     var facingRight = false
+    private var gameOver = false
 
     override suspend fun SContainer.sceneInit() {
         camera = cameraContainer(views.virtualWidthDouble,views.virtualHeightDouble)
@@ -49,10 +50,17 @@ class GameScene : Scene() {
     }
 
     private fun update(dt: TimeSpan) {
+        if (gameOver) {
+            return // Stop updating the game
+        }
         checkInput(dt)
         checkCollisions(dt)
         checkCamerapos(dt)
         enemyMovement(dt)
+    }
+
+    fun stop() {
+        gameOver = true
     }
 
     private fun enemyMovement(dt: TimeSpan) {
@@ -73,8 +81,6 @@ class GameScene : Scene() {
             enemy.setVelocityY(-enemyVelocityY)
         }
     }
-
-
 
     private fun checkCamerapos(dt: TimeSpan) {
         //camera.x = -player.x + sceneWidth / 2
@@ -189,6 +195,12 @@ class GameScene : Scene() {
                 val hitboxLeft = hitbox.x
                 val hitboxRight = hitbox.x + hitbox.width
 
+                if (player.collidesWith(enemy)) {
+                    player.loseHealth()
+                    if(player.lives == 0) {
+                        stop()
+                    }
+                }
                 if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
                     // Set player's y position to just below the platform hitbox
                     player.y = hitboxBottom
