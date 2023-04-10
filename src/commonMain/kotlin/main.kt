@@ -40,6 +40,7 @@ object MainModule : Module() {
         mapPrototype { GameScene() }
         mapPrototype { MainScene() }
         mapPrototype { SplashScreen() }
+        mapPrototype { GameOver() }
     }
 }
 //    val bG = image(resourcesVfs["kornertausta.png"].readBitmap()){

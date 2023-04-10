@@ -9,6 +9,7 @@ class loadImage {
     lateinit var enemyImage: Bitmap
     lateinit var groundBitmap: Bitmap
     lateinit var bgImage: Bitmap
+    lateinit var goImage: Bitmap
     lateinit var platformBitmap: Bitmap
     lateinit var floor: Bitmap
     lateinit var wall: Bitmap
@@ -19,6 +20,7 @@ class loadImage {
         enemyImage = loadImage("enemy.png")
         bgImage = loadImage("testibg.png")
         groundBitmap = loadImage("tiles/bg.png")
+        goImage = loadImage("gameover.png")
         platformBitmap = loadImage("tiles/platform.png")
 //        floor = loadImage("tiles/floor_green.png")
         floor = loadImage("tiles/floor64.png")

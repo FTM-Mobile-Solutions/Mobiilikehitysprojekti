@@ -59,8 +59,9 @@ class GameScene : Scene() {
         enemyMovement(dt)
     }
 
-    fun stop() {
+    private suspend fun stop() {
         gameOver = true
+        sceneContainer.changeTo<GameOver>()
     }
 
     private fun enemyMovement(dt: TimeSpan) {
@@ -198,7 +199,10 @@ class GameScene : Scene() {
                 if (player.collidesWith(enemy)) {
                     player.loseHealth()
                     if(player.lives == 0) {
-                        stop()
+                        launch {
+                            stop()
+                        }
+
                     }
                 }
                 if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
