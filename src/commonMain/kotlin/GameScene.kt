@@ -1,10 +1,13 @@
 import com.soywiz.klock.*
+import com.soywiz.korau.sound.*
 import com.soywiz.korev.*
 import com.soywiz.korge.scene.*
+import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.camera.*
 import com.soywiz.korim.bitmap.*
 import com.soywiz.korio.async.*
+import com.soywiz.korio.file.std.*
 
 class GameScene : Scene() {
     private val fieldMargin = 0
@@ -13,6 +16,8 @@ class GameScene : Scene() {
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
     private lateinit var go: GameOver
+    private lateinit var ms: MainScene
+    private lateinit var tune: SoundChannel
     private var gravity = 3500.0
     private var velocityY = 0.0
     var isOnGround = false
@@ -47,6 +52,9 @@ class GameScene : Scene() {
 
     override suspend fun sceneAfterInit() {
         super.sceneAfterInit()
+        tune = resourcesVfs["gamesong.wav"].readMusic().playForever()
+        tune.volume = 0.0
+        sceneContainer.tween(tune::volume[0.8], time = 1.5.seconds)
         player.live()
     }
 
@@ -235,6 +243,12 @@ class GameScene : Scene() {
         if (player.collidesWith(level.leftwallHitbox)) {
                     player.x = level.leftwallHitbox.x + player.width * 2
         }
+    }
+
+    override suspend fun sceneBeforeLeaving() {
+        sceneContainer.tween(tune::volume[0.0], time = .4.seconds)
+        tune.stop()
+        super.sceneBeforeLeaving()
     }
 }
 

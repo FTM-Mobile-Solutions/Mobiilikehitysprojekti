@@ -14,8 +14,10 @@ class GameOver: Scene() {
     private lateinit var go: Image
     private lateinit var playAgainText: Text
     private lateinit var mainMenuText: Text
+    private lateinit var gtune: SoundChannel
     override suspend fun SContainer.sceneInit() {
-
+        //tune = resourcesVfs["gameover.wav"].readMusic().play()
+        //tune.volume = 0.1
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             tint = Colors.DARKSLATEGRAY
             smoothing = false
@@ -42,9 +44,6 @@ class GameOver: Scene() {
             y += 150
             alpha = 0.0
         }
-        launch {
-            goSound()
-        }
 
         playAgainText.onClick {
             sceneContainer.changeTo<GameScene>()
@@ -56,6 +55,10 @@ class GameOver: Scene() {
     }
 
     override suspend fun sceneAfterInit() {
+        super.sceneAfterInit()
+        gtune = resourcesVfs["gameover.wav"].readMusic().play()
+        gtune.volume = 0.1
+        sceneContainer.tween(gtune::volume[0.1], time = 1.5.seconds)
         bg.tween(bg::alpha[1.0], time = 1.seconds)
         go.tween(go::alpha[1.0], go::scale[1.0], time = 1.seconds)
         playAgainText.tween(playAgainText::alpha[1.0], time = 1.seconds)
@@ -63,19 +66,12 @@ class GameOver: Scene() {
     }
 
     override suspend fun sceneBeforeLeaving() {
-        bg.tween(bg::alpha[0.0], time = .5.seconds)
-        go.tween(go::alpha[0.0], go::scale[0.0], time = .5.seconds)
-        playAgainText.tween(playAgainText::alpha[0.0], time = .5.seconds)
-        mainMenuText.tween(mainMenuText::alpha[0.0], time = .5.seconds)
-    }
-
-    suspend fun getVoice(): Sound {
-        return resourcesVfs["gameover.wav"].readSound()
-    }
-
-    suspend fun goSound() {
-        val playerVoice = getVoice()
-        playerVoice.volume = 0.1 // sets the volume to 10%
-        playerVoice.play()
+        bg.tween(bg::alpha[0.0], time = .4.seconds)
+        go.tween(go::alpha[0.0], go::scale[0.0], time = .4.seconds)
+        playAgainText.tween(playAgainText::alpha[0.0], time = .4.seconds)
+        mainMenuText.tween(mainMenuText::alpha[0.0], time = .4.seconds)
+        sceneContainer.tween(gtune::volume[0.0], time = .4.seconds)
+        gtune.stop()
+        super.sceneBeforeLeaving()
     }
 }
