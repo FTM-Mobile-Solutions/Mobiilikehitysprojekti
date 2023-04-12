@@ -105,7 +105,17 @@ class Level : Container() {
             smoothing = false
             position(gx, gy)
         }
+        val heartImages = mutableListOf<Image>()
+        for (i in 0..2) {
+            val heart = loadImage("heart.png")
+            val heartImage = image(heart) {
+                smoothing = false
+                position(50,1408)
+            }
+            heartImages.add(heartImage)
+        }
     }
+
     suspend fun createplatform(gx:Int, gy:Int) {
         platform = loadImage("tiles/platform.png")
         val platformimage = image(platform) {
