@@ -14,6 +14,7 @@ class loadImage {
     lateinit var floor: Bitmap
     lateinit var wall: Bitmap
     lateinit var play: Bitmap
+    private lateinit var goal: Bitmap
 
     suspend fun init() {
         playerImage = loadImage("player.png")
@@ -26,6 +27,7 @@ class loadImage {
         floor = loadImage("tiles/floor64.png")
         wall = loadImage("tiles/wall64.png")
         play = loadImage("startbutton.png")
+        play = loadImage("goal.png")
 //        wall = loadImage("tiles/wall_green.png")
     }
 }

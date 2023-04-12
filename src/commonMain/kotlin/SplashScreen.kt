@@ -12,6 +12,7 @@ class SplashScreen : Scene() {
     override suspend fun SContainer.sceneInit() {
 
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
+            centerOnStage()
             tint = Colors.DARKVIOLET
             smoothing = false
             alpha = 0.0

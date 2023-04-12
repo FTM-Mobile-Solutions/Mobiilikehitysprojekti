@@ -34,7 +34,7 @@ class GameScene : Scene() {
 
         player = Player()
         player.load()
-        player.position(views.virtualWidth / 2, 730)
+        player.position(120, 1370)
 
         enemy = Enemy()
         enemy.load()
@@ -93,10 +93,12 @@ class GameScene : Scene() {
     }
 
     private fun checkCamerapos(dt: TimeSpan) {
-        //camera.x = -player.x + sceneWidth / 2
         camera.y = -player.y + sceneHeight / 2
-        if (player.y > 400.0) {
-            camera.y = 0.0
+        if (player.y > 1150.0) {
+            camera.y = -336.0
+        }
+        else if (player.y < 400.0) {
+            camera.y = 400.0
         }
     }
     private fun checkInput(dt: TimeSpan) {

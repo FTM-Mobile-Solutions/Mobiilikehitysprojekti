@@ -19,9 +19,11 @@ class GameOver: Scene() {
         //tune = resourcesVfs["gameover.wav"].readMusic().play()
         //tune.volume = 0.1
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
+            centerOnStage()
             tint = Colors.DARKSLATEGRAY
             smoothing = false
             alpha = 0.0
+
         }
 
         go = image(resourcesVfs["gameover.png"].readBitmap()) {

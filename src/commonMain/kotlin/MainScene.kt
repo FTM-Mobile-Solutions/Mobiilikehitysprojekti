@@ -18,6 +18,7 @@ class MainScene : Scene() {
 
     override suspend fun SContainer.sceneInit() {
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
+            centerOnStage()
             smoothing = false
             alpha = 0.0
         }
