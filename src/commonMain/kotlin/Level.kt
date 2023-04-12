@@ -105,12 +105,13 @@ class Level : Container() {
             smoothing = false
             position(gx, gy)
         }
+        val heartWidth = 30 // replace with actual width of heart image
         val heartImages = mutableListOf<Image>()
         for (i in 0..2) {
             val heart = loadImage("heart.png")
             val heartImage = image(heart) {
                 smoothing = false
-                position(50,1408)
+                position(20 + i * heartWidth, 1408)
             }
             heartImages.add(heartImage)
         }
