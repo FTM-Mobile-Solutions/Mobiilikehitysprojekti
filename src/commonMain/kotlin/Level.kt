@@ -111,7 +111,7 @@ class Level : Container() {
             val heart = loadImage("heart.png")
             val heartImage = image(heart) {
                 smoothing = false
-                position(20 + i * heartWidth, 1408)
+                position(40 + i * heartWidth, 350)
             }
             heartImages.add(heartImage)
         }
