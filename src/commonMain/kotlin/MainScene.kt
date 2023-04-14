@@ -14,6 +14,7 @@ import com.soywiz.korma.geom.*
 class MainScene : Scene() {
     private lateinit var bg: Image
     private lateinit var playButton: Image
+    private lateinit var optionsButton: Image
     private lateinit var tune: SoundChannel
 
     override suspend fun SContainer.sceneInit() {
@@ -28,8 +29,17 @@ class MainScene : Scene() {
             smoothing = false
             alpha = 0.0
         }
+        optionsButton = image(resourcesVfs["optionsbutton.png"].readBitmap()) {
+            position(280,420)
+            //centerOnStage()
+            smoothing = false
+            alpha = 0.0
+        }
         playButton.onClick {
             sceneContainer.changeTo<GameScene>()
+        }
+        optionsButton.onClick {
+            tune.volume = 0.0
         }
     }
     override suspend fun sceneAfterInit() {
@@ -39,11 +49,13 @@ class MainScene : Scene() {
         sceneContainer.tween(tune::volume[0.2], time = 1.5.seconds)
         bg.tween(bg::alpha[1.0], time = 1.seconds)
         playButton.tween(playButton::alpha[1.0], playButton::scale[1.0], time = 1.seconds)
+        optionsButton.tween(optionsButton::alpha[1.0], optionsButton::scale[1.0], time = 1.seconds)
     }
 
     override suspend fun sceneBeforeLeaving() {
         bg.tween(bg::alpha[0.0], time = .5.seconds)
         playButton.tween(playButton::alpha[0.0], playButton::scale[0.0], time = .5.seconds)
+        optionsButton.tween(optionsButton::alpha[0.0], optionsButton::scale[0.0], time = .5.seconds)
         sceneContainer.tween(tune::volume[0.0], time = .4.seconds)
         tune.stop()
         super.sceneBeforeLeaving()
