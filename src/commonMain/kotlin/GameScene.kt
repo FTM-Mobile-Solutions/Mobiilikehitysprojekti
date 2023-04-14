@@ -62,6 +62,7 @@ class GameScene : Scene() {
         tune.volume = 0.0
         sceneContainer.tween(tune::volume[0.8], time = 1.5.seconds)
         player.live()
+        //player.createhearts()
     }
 
     private fun update(dt: TimeSpan) {
@@ -264,7 +265,6 @@ class GameScene : Scene() {
 
         }
     }
-
     override suspend fun sceneBeforeLeaving() {
         sceneContainer.tween(tune::volume[0.0], time = .4.seconds)
         tune.stop()

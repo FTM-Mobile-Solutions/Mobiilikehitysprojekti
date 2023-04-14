@@ -105,16 +105,6 @@ class Level : Container() {
             smoothing = false
             position(gx, gy)
         }
-        val heartWidth = 30 // replace with actual width of heart image
-        val heartImages = mutableListOf<Image>()
-        for (i in 0..2) {
-            val heart = loadImage("heart.png")
-            val heartImage = image(heart) {
-                smoothing = false
-                position(40 + i * heartWidth, 350)
-            }
-            heartImages.add(heartImage)
-        }
     }
 
     suspend fun createplatform(gx:Int, gy:Int) {
