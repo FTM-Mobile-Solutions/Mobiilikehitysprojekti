@@ -12,7 +12,7 @@ class Player : Container() {
         HURT
     }
 
-    var lives: Int = 3
+    var lives = 3
     var moveSpeed = 100.0
     var jumping = false
     var jumpForce = 0.0

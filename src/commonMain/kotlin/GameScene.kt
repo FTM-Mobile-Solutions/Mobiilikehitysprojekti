@@ -24,6 +24,7 @@ class GameScene : Scene() {
     var isOnPlatform = false
     var facingRight = false
     private var gameOver = false
+    private var playerHit = false
 
     override suspend fun SContainer.sceneInit() {
         camera = cameraContainer(views.virtualWidthDouble,views.virtualHeightDouble)
@@ -208,7 +209,14 @@ class GameScene : Scene() {
                 val hitboxRight = hitbox.x + hitbox.width
 
                 if (player.collidesWith(enemy)) {
-                    player.loseHealth()
+                    if (!playerHit) {
+                        playerHit = true
+                        player.loseHealth()
+                        launch {
+                            delay(1.seconds)
+                            playerHit = false
+                        }
+                    }
                     if(player.lives == 0) {
                         launch {
                             stop()
