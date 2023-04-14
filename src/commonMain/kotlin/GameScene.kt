@@ -13,6 +13,7 @@ class GameScene : Scene() {
     private val fieldMargin = 0
     private lateinit var player: Player
     private lateinit var enemy: Enemy
+    private lateinit var coin: Coin
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
     private lateinit var go: GameOver
@@ -36,6 +37,9 @@ class GameScene : Scene() {
         player.load()
         player.position(120, 1370)
 
+        coin = Coin()
+        coin.load(15)
+
         enemy = Enemy()
         enemy.load()
 //        addChild(player)
@@ -44,6 +48,7 @@ class GameScene : Scene() {
         camera.addChild(level)
         camera.addChild(player)
         camera.addChild(enemy)
+        camera.addChild(coin)
 
         addChild(camera)
 
@@ -244,6 +249,11 @@ class GameScene : Scene() {
         }
         if (player.collidesWith(level.leftwallHitbox)) {
                     player.x = level.leftwallHitbox.x + player.width * 2
+        }
+
+        if(player.collidesWith(coin)){
+            coin.checkCollisions(player);
+
         }
     }
 
