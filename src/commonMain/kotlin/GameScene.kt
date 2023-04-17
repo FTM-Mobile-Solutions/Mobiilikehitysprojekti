@@ -10,6 +10,7 @@ import com.soywiz.korio.file.std.*
 
 class GameScene : Scene() {
     private lateinit var player: Player
+    private lateinit var health: Health
     private lateinit var enemy: Enemy
     private lateinit var coin: Coin
     private lateinit var level: Level
@@ -30,10 +31,12 @@ class GameScene : Scene() {
         level.levelinit()
         level.level1()
 
-
         player = Player()
         player.load()
         player.position(120, 1370)
+
+        health = Health()
+        health.createhearts()
 
         coin = Coin()
         coin.load(15)
@@ -46,6 +49,7 @@ class GameScene : Scene() {
         camera.addChild(level)
         camera.addChild(player)
         camera.addChild(enemy)
+        camera.addChild(health)
         camera.addChild(coin)
 
         addChild(camera)
@@ -59,7 +63,6 @@ class GameScene : Scene() {
         tune.volume = 0.0
         sceneContainer.tween(tune::volume[0.8], time = 1.5.seconds)
         player.live()
-        //player.createhearts()
     }
 
     private fun update(dt: TimeSpan) {
