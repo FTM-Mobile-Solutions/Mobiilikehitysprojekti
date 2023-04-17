@@ -1,4 +1,7 @@
+import com.soywiz.klock.*
+import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
+import com.soywiz.korge.view.tween.*
 import com.soywiz.korim.bitmap.*
 import com.soywiz.korim.color.*
 
@@ -10,21 +13,22 @@ class Level : Container() {
         LEVEL_3
     }
 
-    lateinit var bg: Bitmap
-    lateinit var ground: Bitmap
-    lateinit var leftwall: Bitmap
-    lateinit var rightwall: Bitmap
-    lateinit var platform: Bitmap
-    lateinit var platform_small: Bitmap
-    lateinit var goal: Bitmap
-    lateinit var goalHitbox: SolidRect
-    lateinit var groundHitbox: SolidRect
-    lateinit var leftwallHitbox: SolidRect
-    lateinit var rightwallHitbox: SolidRect
+    private lateinit var bg: Bitmap
+    private lateinit var ground: Bitmap
+    private lateinit var leftwall: Bitmap
+    private lateinit var rightwall: Bitmap
+    private lateinit var platform: Bitmap
+    private lateinit var platform_small: Bitmap
+    private lateinit var goal: Bitmap
+     lateinit var goalHitbox: SolidRect
+     lateinit var groundHitbox: SolidRect
+     lateinit var leftwallHitbox: SolidRect
+     lateinit var rightwallHitbox: SolidRect
     val platformHitboxes = mutableListOf<SolidRect>()
     val goalHitboxes = mutableListOf<SolidRect>()
 
     lateinit var state: State
+    var transitionaplha = 0.0
 
     suspend fun levelinit() {
         state = State.LEVEL_INIT
@@ -89,19 +93,24 @@ class Level : Container() {
         state = State.LEVEL_1
     }
 
+    fun leveldestroyer() {
+        platformHitboxes.clear()
+        goalHitboxes.clear()
+    }
+
     suspend fun level1() {
         state = State.LEVEL_1
         //platformit kentän pohjalta ylöspäin
         createplatform_small(225, 1325)
         createplatform_small(75, 1275)
         createplatform(100, 1100)
-        createplatform_small(200, 1000)
-        createplatform_small(75, 800)
-        createplatform_small(40, 660)
-        createplatform_small(200, 650)
-        createplatform_small(200, 650)
-        createplatform_small(40, 500)
-        createplatform(200, 400)
+//        createplatform_small(200, 1000)
+//        createplatform_small(75, 800)
+//        createplatform_small(40, 660)
+//        createplatform_small(200, 650)
+//        createplatform_small(200, 650)
+//        createplatform_small(40, 500)
+//        createplatform(200, 400)
         val addGoal = platformHitboxes.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
@@ -114,6 +123,24 @@ class Level : Container() {
         createplatform_small(225, 1325)
         createplatform(75, 1200)
         createplatform(100, 1100)
+//        createplatform_small(200, 1000)
+//        createplatform_small(75, 800)
+//        createplatform_small(40, 660)
+//        createplatform_small(200, 650)
+//        createplatform_small(200, 650)
+//        createplatform_small(40, 500)
+//        createplatform(200, 400)
+        val addGoal = platformHitboxes.last()
+        val goalX = addGoal.x + 16
+        val goalY = addGoal.y - 96
+        creategoal(goalX, goalY)
+    }
+    suspend fun level3() {
+        state = State.LEVEL_3
+        //platformit kentän pohjalta ylöspäin
+        createplatform(225, 1325)
+//        createplatform(75, 1200)
+//        createplatform(100, 1100)
 //        createplatform_small(200, 1000)
 //        createplatform_small(75, 800)
 //        createplatform_small(40, 660)

@@ -15,6 +15,8 @@ class GameScene : Scene() {
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
     private lateinit var tune: SoundChannel
+    private var lvl = 0
+    private var x = 0
     private var gravity = 3500.0
     private var velocityY = 0.0
     private var isOnGround = false
@@ -27,21 +29,15 @@ class GameScene : Scene() {
         camera = cameraContainer(views.virtualWidthDouble,views.virtualHeightDouble)
 
         level = Level()
-        level.levelinit()
-        level.level1()
-
 
         player = Player()
         player.load()
-        player.position(120, 1370)
 
         coin = Coin()
         coin.load(15)
 
         enemy = Enemy()
         enemy.load()
-//        addChild(player)
-//        addChild(level)
 
         camera.addChild(level)
         camera.addChild(player)
@@ -49,6 +45,9 @@ class GameScene : Scene() {
         camera.addChild(coin)
 
         addChild(camera)
+
+
+        levelchanger(lvl)
 
         addUpdater { update(it) }
     }
@@ -60,6 +59,37 @@ class GameScene : Scene() {
         sceneContainer.tween(tune::volume[0.8], time = 1.5.seconds)
         player.live()
         //player.createhearts()
+    }
+
+    private suspend fun levelchanger(levelnum: Int) {
+        if(levelnum == 0) {
+            level.leveldestroyer()
+            level.levelinit()
+            lvl++
+            println("Changed to level $lvl")
+            levelchanger(lvl)
+            x = 0
+            player.position(120, 1370)
+
+        }
+        when(levelnum) {
+            1 -> level.level1()
+            2 -> level.level2()
+            3 -> level.level3()
+
+        }
+//        else if (levelnum == 1) {
+//            level.level1()
+//            player.position(120, 1370)
+//        }
+//        else if (levelnum == 2) {
+//            level.level2()
+//            player.position(120, 1370)
+//        }
+//        else if (levelnum == 3) {
+//            level.level3()
+//            player.position(120, 1370)
+//        }
     }
 
     private fun update(dt: TimeSpan) {
@@ -98,7 +128,7 @@ class GameScene : Scene() {
 
     private fun checkCamerapos() {
         camera.y = -player.y + sceneHeight / 2
-        if (player.y > 1150.0) {
+        if (player.y > 1130.0) {
             camera.y = -336.0
         }
         else if (player.y < 400.0) {
@@ -125,8 +155,8 @@ class GameScene : Scene() {
                 player.jumpForce = 1250.0
             if (player.jumpDistance >= 350)
                 player.jumpDistance = 350.0
-            println("force:"+player.jumpForce)
-            println("distance:"+player.jumpDistance)
+            //println("force:"+player.jumpForce)
+            //println("distance:"+player.jumpDistance)
         }
 
         if (views.input.keys.justReleased(Key.RIGHT) && !player.jumping) {
@@ -158,8 +188,8 @@ class GameScene : Scene() {
                 player.jumpForce = 1250.0
             if (player.jumpDistance >= 350)
                 player.jumpDistance = 350.0
-            println("force:"+player.jumpForce)
-            println("distance:"+player.jumpDistance)
+            //println("force:"+player.jumpForce)
+            //println("distance:"+player.jumpDistance)
         }
 
         if (views.input.keys.justReleased(Key.LEFT) && !player.jumping) {
@@ -220,7 +250,7 @@ class GameScene : Scene() {
                             playerHit = false
                         }
                     }
-                    if(player.lives == 0) {
+                    if (player.lives == 0) {
                         launch {
                             stop()
                         }
@@ -251,15 +281,22 @@ class GameScene : Scene() {
             }
         }
         if (player.collidesWith(level.rightwallHitbox)) {
-                    player.x = level.rightwallHitbox.x - player.width
+            player.x = level.rightwallHitbox.x - player.width
         }
         if (player.collidesWith(level.leftwallHitbox)) {
-                    player.x = level.leftwallHitbox.x + player.width * 2
+            player.x = level.leftwallHitbox.x + player.width * 2
         }
-
-        if(player.collidesWith(coin)){
+        if (player.collidesWith(coin)) {
             coin.checkCollisions(player)
 
+        }
+        for (goal in level.goalHitboxes) {
+            if (player.collidesWith(goal) && x == 0) {
+                x = 1
+                launch {
+                    levelchanger(0)
+                }
+            }
         }
     }
     override suspend fun sceneBeforeLeaving() {

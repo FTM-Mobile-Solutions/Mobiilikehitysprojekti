@@ -24,7 +24,7 @@ suspend fun main() = Korge(Korge.Config(module = MainModule))
 
 object MainModule : Module() {
     override val mainScene: KClass<out Scene>
-        get() = SplashScreen::class
+        get() = GameScene::class
     override val title: String
         get() = "Konapeli"
     override val size: SizeInt
@@ -33,7 +33,7 @@ object MainModule : Module() {
         get() = ScaleMode.COVER
     override val windowSize: SizeInt
         get() = SizeInt(360, 800)
-    override val bgcolor: RGBA
+    override val bgcolor
         get() = Colors.BLACK
 
     override suspend fun AsyncInjector.configure() {
