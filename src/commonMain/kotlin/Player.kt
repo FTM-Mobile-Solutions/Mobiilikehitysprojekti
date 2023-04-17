@@ -28,65 +28,52 @@ class Player : Container() {
         println(state)
     }
 
-    fun loseHealth() {
-        lives -= 1
-        // Do something when the player loses health, e.g. play a sound or show a visual effect.
-        println(lives)
-    }
+        fun loseHealth() {
+            lives -= 1
+            // Do something when the player loses health, e.g. play a sound or show a visual effect
 
-    suspend fun getVoice(): Sound {
-        return resourcesVfs["konaa.wav"].readSound()
-    }
+            println(lives)
+        }
 
-    suspend fun konaSound() {
-        val playerVoice = getVoice()
-        playerVoice.volume = 0.1 // sets the volume to 10%
-        playerVoice.play()
-    }
+        suspend fun getVoice(): Sound {
+            return resourcesVfs["konaa.wav"].readSound()
+        }
 
-    fun setVelocityX(velocity: Double) {
-        this.velocityX = velocity
-    }
+        suspend fun konaSound() {
+            val playerVoice = getVoice()
+            playerVoice.volume = 0.1 // sets the volume to 10%
+            playerVoice.play()
+        }
 
-    fun setVelocityY(velocity: Double) {
-        this.velocityY = velocity
-    }
+        fun setVelocityX(velocity: Double) {
+            this.velocityX = velocity
+        }
 
-    /*fun getVelocityY(): Double {
+        fun setVelocityY(velocity: Double) {
+            this.velocityY = velocity
+        }
+
+        /*fun getVelocityY(): Double {
         return velocityY
     }*/
 
-    /*fun isOnGround(): Boolean {
+        /*fun isOnGround(): Boolean {
         return isOnGround
     }*/
 
+        fun live() {
+            state = State.LIVE
+            println(state)
+            state = State.MOVING
+        }
 
-    fun live() {
-        state = State.LIVE
-        println(state)
-        state = State.MOVING
-    }
+        fun moving() {
+            state = State.MOVING
 
-    fun moving() {
-        state = State.MOVING
+            println(state)
+        }
 
-        println(state)
-    }
-
-    fun hurt() {
-        state = State.HURT
-    }
-
-    suspend fun createhearts() {
-        val heartWidth = 30
-        val heartImages = mutableListOf<Image>()
-
-        for (i in 0..2) {
-            val heart = loadImage("heart.png")
-            val heartImage = image(heart) {
-                position(40 + i * heartWidth, 350)
-            }
-            heartImages.add(heartImage)
+        fun hurt() {
+            state = State.HURT
         }
     }
-}
