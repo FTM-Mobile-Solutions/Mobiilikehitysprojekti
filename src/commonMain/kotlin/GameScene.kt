@@ -36,7 +36,7 @@ class GameScene : Scene() {
         player.position(120, 1370)
 
         health = Health()
-        health.createhearts()
+        health.createHearts()
 
         coin = Coin()
         coin.load(15)

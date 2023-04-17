@@ -30,7 +30,8 @@ class Player : Container() {
 
         fun loseHealth() {
             lives -= 1
-            // Do something when the player loses health, e.g. play a sound or show a visual effect.
+            // Do something when the player loses health, e.g. play a sound or show a visual effect
+
             println(lives)
         }
 
