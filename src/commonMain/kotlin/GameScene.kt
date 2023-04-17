@@ -244,6 +244,7 @@ class GameScene : Scene() {
 
                 if (player.collidesWith(enemy)) {
                     if (!playerHit) {
+                        health.removeHeart()
                         playerHit = true
                         player.loseHealth()
                         launch {

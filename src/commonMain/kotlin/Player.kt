@@ -4,6 +4,7 @@ import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
 class Player : Container() {
+
     enum class State {
         LOAD,
         LIVE,
@@ -30,20 +31,17 @@ class Player : Container() {
 
         fun loseHealth() {
             lives -= 1
-            // Do something when the player loses health, e.g. play a sound or show a visual effect
-
             println(lives)
         }
 
-        suspend fun getVoice(): Sound {
+        /*suspend fun getVoice(): Sound {
             return resourcesVfs["konaa.wav"].readSound()
         }
-
         suspend fun konaSound() {
             val playerVoice = getVoice()
             playerVoice.volume = 0.1 // sets the volume to 10%
             playerVoice.play()
-        }
+        } */
 
         fun setVelocityX(velocity: Double) {
             this.velocityX = velocity
