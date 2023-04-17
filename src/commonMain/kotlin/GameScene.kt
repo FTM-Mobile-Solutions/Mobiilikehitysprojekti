@@ -34,6 +34,9 @@ class GameScene : Scene() {
         player = Player()
         player.load()
 
+        health = Health()
+        health.createHearts()
+
         coin = Coin()
         coin.load(15)
 
@@ -79,18 +82,6 @@ class GameScene : Scene() {
             3 -> level.level3()
 
         }
-//        else if (levelnum == 1) {
-//            level.level1()
-//            player.position(120, 1370)
-//        }
-//        else if (levelnum == 2) {
-//            level.level2()
-//            player.position(120, 1370)
-//        }
-//        else if (levelnum == 3) {
-//            level.level3()
-//            player.position(120, 1370)
-//        }
     }
 
     private fun update(dt: TimeSpan) {
