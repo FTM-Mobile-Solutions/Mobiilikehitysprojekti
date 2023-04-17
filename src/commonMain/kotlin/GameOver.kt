@@ -6,7 +6,6 @@ import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.format.*
-import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
 class GameOver: Scene() {

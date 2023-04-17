@@ -1,8 +1,5 @@
-import com.soywiz.korau.sound.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.*
-import com.soywiz.korio.async.*
-import com.soywiz.korio.file.std.*
 
 class Enemy : Container() {
 
@@ -15,9 +12,9 @@ class Enemy : Container() {
     private var velocityX: Double = 100.0
 
     suspend fun load() {
-        createBat(64, 400)
-        createBat(64, 500)
-        createBat(64, 600)
+//        createBat(64, 400)
+//        createBat(64, 500)
+//        createBat(64, 600)
         createBat(64,1300)
     }
     fun setVelocityX(velocity: Double) {

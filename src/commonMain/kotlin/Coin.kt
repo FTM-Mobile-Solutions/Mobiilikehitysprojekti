@@ -1,6 +1,4 @@
-import com.soywiz.korge.*
 import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.*
 import kotlin.random.Random
 
 class Coin: Container()  {

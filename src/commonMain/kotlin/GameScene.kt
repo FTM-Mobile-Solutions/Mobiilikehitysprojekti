@@ -5,25 +5,21 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.camera.*
-import com.soywiz.korim.bitmap.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
 class GameScene : Scene() {
-    private val fieldMargin = 0
     private lateinit var player: Player
     private lateinit var enemy: Enemy
     private lateinit var coin: Coin
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
-    private lateinit var go: GameOver
-    private lateinit var ms: MainScene
     private lateinit var tune: SoundChannel
     private var gravity = 3500.0
     private var velocityY = 0.0
-    var isOnGround = false
-    var isOnPlatform = false
-    var facingRight = false
+    private var isOnGround = false
+    private var isOnPlatform = false
+    private var facingRight = false
     private var gameOver = false
     private var playerHit = false
 
@@ -31,6 +27,7 @@ class GameScene : Scene() {
         camera = cameraContainer(views.virtualWidthDouble,views.virtualHeightDouble)
 
         level = Level()
+        level.levelinit()
         level.level1()
 
 
@@ -70,8 +67,8 @@ class GameScene : Scene() {
             return // Stop updating the game
         }
         checkInput(dt)
-        checkCollisions(dt)
-        checkCamerapos(dt)
+        checkCollisions()
+        checkCamerapos()
         enemyMovement(dt)
     }
 
@@ -99,7 +96,7 @@ class GameScene : Scene() {
         }
     }
 
-    private fun checkCamerapos(dt: TimeSpan) {
+    private fun checkCamerapos() {
         camera.y = -player.y + sceneHeight / 2
         if (player.y > 1150.0) {
             camera.y = -336.0
@@ -195,7 +192,7 @@ class GameScene : Scene() {
     }
 
 
-    private fun checkCollisions(dt: TimeSpan) {
+    private fun checkCollisions() {
         isOnGround = player.collidesWith(level.groundHitbox)
         if (isOnGround) {
             player.y = level.groundHitbox.y - player.height
@@ -261,7 +258,7 @@ class GameScene : Scene() {
         }
 
         if(player.collidesWith(coin)){
-            coin.checkCollisions(player);
+            coin.checkCollisions(player)
 
         }
     }

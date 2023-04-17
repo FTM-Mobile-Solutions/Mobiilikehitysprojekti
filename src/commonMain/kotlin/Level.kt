@@ -4,6 +4,7 @@ import com.soywiz.korim.color.*
 
 class Level : Container() {
     enum class State {
+        LEVEL_INIT,
         LEVEL_1,
         LEVEL_2,
         LEVEL_3
@@ -16,15 +17,18 @@ class Level : Container() {
     lateinit var platform: Bitmap
     lateinit var platform_small: Bitmap
     lateinit var goal: Bitmap
+    lateinit var goalHitbox: SolidRect
     lateinit var groundHitbox: SolidRect
     lateinit var leftwallHitbox: SolidRect
     lateinit var rightwallHitbox: SolidRect
     val platformHitboxes = mutableListOf<SolidRect>()
+    val goalHitboxes = mutableListOf<SolidRect>()
 
     lateinit var state: State
 
-    suspend fun level1() {
-        state = State.LEVEL_1
+    suspend fun levelinit() {
+        state = State.LEVEL_INIT
+
         bg = loadImage("tiles/bg.png")
         val bgimage = image(bg) {
             tint = Colors.LIGHTSLATEGREY
@@ -82,6 +86,11 @@ class Level : Container() {
             position(332, -192)
         }
 
+        state = State.LEVEL_1
+    }
+
+    suspend fun level1() {
+        state = State.LEVEL_1
         //platformit kentän pohjalta ylöspäin
         createplatform_small(225, 1325)
         createplatform_small(75, 1275)
@@ -99,12 +108,36 @@ class Level : Container() {
         creategoal(goalX, goalY)
     }
 
+    suspend fun level2() {
+        state = State.LEVEL_2
+        //platformit kentän pohjalta ylöspäin
+        createplatform_small(225, 1325)
+        createplatform(75, 1200)
+        createplatform(100, 1100)
+//        createplatform_small(200, 1000)
+//        createplatform_small(75, 800)
+//        createplatform_small(40, 660)
+//        createplatform_small(200, 650)
+//        createplatform_small(200, 650)
+//        createplatform_small(40, 500)
+//        createplatform(200, 400)
+        val addGoal = platformHitboxes.last()
+        val goalX = addGoal.x + 16
+        val goalY = addGoal.y - 96
+        creategoal(goalX, goalY)
+    }
+
     suspend fun creategoal(gx:Double, gy:Double) {
         goal = loadImage("goal.png")
         val goalimage = image(goal) {
             smoothing = false
             position(gx, gy)
         }
+        goalHitbox = solidRect(width = goal.width, height = goal.height) {
+            alpha = 0.0
+            position(gx, gy)
+        }
+        goalHitboxes.add(goalHitbox)
     }
 
     suspend fun createplatform(gx:Int, gy:Int) {
