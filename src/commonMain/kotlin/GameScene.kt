@@ -27,7 +27,7 @@ class GameScene : Scene() {
     private var playerHit = false
 
     override suspend fun SContainer.sceneInit() {
-        camera = cameraContainer(views.virtualWidthDouble,views.virtualHeightDouble)
+        camera = cameraContainer(views.virtualWidthDouble, views.virtualHeightDouble)
 
         level = Level()
 
@@ -66,7 +66,7 @@ class GameScene : Scene() {
     }
 
     private suspend fun levelchanger(levelnum: Int) {
-        if(levelnum == 0) {
+        if (levelnum == 0) {
             level.leveldestroyer()
             level.levelinit()
             lvl++
@@ -76,8 +76,8 @@ class GameScene : Scene() {
             player.position(120, 1370)
 
         }
-        when(levelnum) {
-            1 -> level.level1()
+        when (levelnum) {
+            1 -> level.level2()
             2 -> level.level2()
             3 -> level.level3()
 
@@ -105,15 +105,15 @@ class GameScene : Scene() {
         enemy.x += enemyVelocityX * dt.seconds
         enemy.y += enemyVelocityY * dt.seconds
 
-        if(enemy.x > 230 && enemyVelocityX > 0){
+        if (enemy.x > 230 && enemyVelocityX > 0) {
             enemy.setVelocityX(-enemyVelocityX)
-        } else if (enemy.x < -20 && enemyVelocityX < 0){
+        } else if (enemy.x < -20 && enemyVelocityX < 0) {
             enemy.setVelocityX(-enemyVelocityX)
         }
 
-        if(enemy.y > 10 && enemyVelocityY > 0){
+        if (enemy.y > 10 && enemyVelocityY > 0) {
             enemy.setVelocityY(-enemyVelocityY)
-        } else if(enemy.y < 0 && enemyVelocityY < 0){
+        } else if (enemy.y < 0 && enemyVelocityY < 0) {
             enemy.setVelocityY(-enemyVelocityY)
         }
     }
@@ -122,11 +122,11 @@ class GameScene : Scene() {
         camera.y = -player.y + sceneHeight / 2
         if (player.y > 1130.0) {
             camera.y = -336.0
-        }
-        else if (player.y < 400.0) {
+        } else if (player.y < 400.0) {
             camera.y = 400.0
         }
     }
+
     private fun checkInput(dt: TimeSpan) {
         velocityY += gravity * dt.seconds
         player.y += velocityY * dt.seconds
@@ -215,6 +215,9 @@ class GameScene : Scene() {
 
 
     private fun checkCollisions() {
+        val playerTop = player.y
+        val playerBottom = player.y + player.height
+
         isOnGround = player.collidesWith(level.groundHitbox)
         if (isOnGround) {
             player.y = level.groundHitbox.y - player.height
@@ -222,56 +225,73 @@ class GameScene : Scene() {
             isOnPlatform = false
         }
         for (hitbox in level.platformHitboxes) {
-            isOnPlatform = player.collidesWith(hitbox)
-            if (isOnPlatform) {
-                val playerTop = player.y
-                val playerBottom = player.y + player.height
-                val playerLeft = player.x
-                val playerRight = player.x + player.width
-                val hitboxTop = hitbox.y
-                val hitboxBottom = hitbox.y + hitbox.height
-                val hitboxLeft = hitbox.x
-                val hitboxRight = hitbox.x + hitbox.width
+            val hitboxBottom = hitbox.y + hitbox.height
+            val hitboxTop = hitbox.y
+            isOnPlatform = hitbox.collidesWith(player) && playerBottom > hitboxTop
 
-                if (player.collidesWith(enemy)) {
-                    if (!playerHit) {
-                        health.removeHeart()
-                        playerHit = true
-                        player.loseHealth()
-                        launch {
-                            delay(1.seconds)
-                            playerHit = false
-                        }
-                    }
-                    if (player.lives == 0) {
-                        launch {
-                            stop()
-                        }
-
-                    }
-                }
-                if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
-                    // Set player's y position to just below the platform hitbox
-                    player.y = hitboxBottom
-                    velocityY = -velocityY / 2
-                } else if (playerBottom > hitboxTop && playerTop < hitboxTop) {
-                    // Set player's y position to just above the platform hitbox
-                    player.jumping = false
-                    isOnGround = true
-                    player.y = hitboxTop - player.height
-                    player.setVelocityY(0.0)
-                } else if (playerRight > hitboxLeft && playerLeft < hitboxLeft && playerBottom > hitboxTop && playerTop < hitboxBottom) {
-                    // Set player's x position to just left of the platform hitbox
-                    player.x = hitboxLeft - player.width
-                    player.setVelocityX(0.0)
-                    player.setVelocityY(0.0)
-                } else if (playerLeft < hitboxRight && playerRight > hitboxRight && playerBottom > hitboxTop && playerTop < hitboxBottom) {
-                    // Set player's x position to just right of the platform hitbox
-                    player.x = hitboxRight
-                    player.setVelocityX(0.0)
-                    player.setVelocityY(0.0)
+            if (hitbox.collidesWith(player) && playerBottom > hitboxTop) {
+                player.y = hitbox.y - player.height
+                println(player.y)
+                player.jumping = false
+                isOnGround = true
+            }
+            if (hitbox.collidesWith(player) && playerTop < hitboxBottom && playerBottom > hitboxBottom) {
+                player.y = hitbox.y + hitbox.height
+                velocityY = -velocityY / 2
+            }
+        }
+//        for (hitbox in level.platformHitboxes) {
+//                val playerTop = player.y
+//                val playerBottom = player.y + player.height
+//                val playerLeft = player.x
+//                val playerRight = player.x + player.width
+//                val hitboxTop = hitbox.y
+//                val hitboxBottom = hitbox.y + hitbox.height
+//                val hitboxLeft = hitbox.x
+//                val hitboxRight = hitbox.x + hitbox.width
+//                println(playerBottom)
+//            isOnPlatform = player.collidesWith(hitbox)
+//            if (isOnPlatform) {
+//                if (playerBottom > hitboxTop && playerTop < hitboxTop) {
+//                    // Set player's y position to just above the platform hitbox
+//                    player.y = hitboxTop - player.height
+//                    player.jumping = false
+//                    isOnGround = true
+//                } else if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
+//                    // Set player's y position to just below the platform hitbox
+//                    player.y = hitboxBottom
+//                    velocityY = -velocityY / 2
+//                } else if (playerRight > hitboxLeft && playerLeft < hitboxLeft && playerBottom > hitboxTop && playerTop < hitboxBottom) {
+//                    // Set player's x position to just left of the platform hitbox
+//                    player.x = hitboxLeft - player.width
+//                    player.setVelocityX(0.0)
+//                    player.setVelocityY(0.0)
+//                } else if (playerLeft < hitboxRight && playerRight > hitboxRight && playerBottom > hitboxTop && playerTop < hitboxBottom) {
+//                    // Set player's x position to just right of the platform hitbox
+//                    player.x = hitboxRight
+//                    player.setVelocityX(0.0)
+//                    player.setVelocityY(0.0)
+//                }
+//            }
+//        }
+        if (player.collidesWith(enemy)) {
+            if (!playerHit) {
+                health.removeHeart()
+                playerHit = true
+                player.loseHealth()
+                launch {
+                    delay(1.seconds)
+                    playerHit = false
                 }
             }
+            if (player.lives == 0) {
+                launch {
+                    stop()
+                }
+            }
+        }
+        if (player.y > 1400) {
+            player.position(120, 1370)
         }
         if (player.collidesWith(level.rightwallHitbox)) {
             player.x = level.rightwallHitbox.x - player.width

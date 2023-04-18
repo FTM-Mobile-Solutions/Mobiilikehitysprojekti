@@ -15,7 +15,7 @@ class Enemy : Container() {
 //        createBat(64, 400)
 //        createBat(64, 500)
 //        createBat(64, 600)
-        createBat(64,1300)
+//        createBat(64,1300)
     }
     fun setVelocityX(velocity: Double) {
         this.velocityX = velocity

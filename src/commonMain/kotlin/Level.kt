@@ -26,12 +26,13 @@ class Level : Container() {
      lateinit var rightwallHitbox: SolidRect
     val platformHitboxes = mutableListOf<SolidRect>()
     val goalHitboxes = mutableListOf<SolidRect>()
+    private lateinit var enemy: Enemy
 
     lateinit var state: State
-    var transitionaplha = 0.0
-
     suspend fun levelinit() {
         state = State.LEVEL_INIT
+
+        enemy = Enemy()
 
         bg = loadImage("tiles/bg.png")
         val bgimage = image(bg) {
@@ -104,13 +105,13 @@ class Level : Container() {
         createplatform_small(225, 1325)
         createplatform_small(75, 1275)
         createplatform(100, 1100)
-//        createplatform_small(200, 1000)
-//        createplatform_small(75, 800)
-//        createplatform_small(40, 660)
-//        createplatform_small(200, 650)
-//        createplatform_small(200, 650)
-//        createplatform_small(40, 500)
-//        createplatform(200, 400)
+        createplatform_small(200, 1000)
+        createplatform_small(75, 800)
+        createplatform_small(40, 660)
+        createplatform_small(200, 650)
+        createplatform_small(200, 650)
+        createplatform_small(40, 500)
+        createplatform(200, 400)
         val addGoal = platformHitboxes.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
@@ -120,7 +121,7 @@ class Level : Container() {
     suspend fun level2() {
         state = State.LEVEL_2
         //platformit kentän pohjalta ylöspäin
-        createplatform_small(225, 1325)
+        createplatform(200, 1300)
         createplatform(75, 1200)
         createplatform(100, 1100)
 //        createplatform_small(200, 1000)
