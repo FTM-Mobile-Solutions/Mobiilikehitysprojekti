@@ -163,16 +163,27 @@ class GameScene : Scene() {
         var touchEndPos = Point()
         var jumped = false
 
-        touchPad.onDown {
+        fun setPos() {
             touchStartPos = views.globalMouseXY
         }
 
+        fun getPos(): Point {
+            return touchStartPos
+        }
+
+        touchPad.onDown outer@{
+            setPos()
+            if(player.jumpForce < 500.0) {
+                return@outer
+            }
+        }
         touchPad.onMouseDrag {
             if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
                 player.jumping = true
                 facingRight = true
+                //var pos = getPos()
                 // Calculate length of mouse drag
-                val dragLength = touchEndPos.distanceTo(touchStartPos)
+                var dragLength = touchEndPos.distanceTo(getPos())
                 print(dragLength)
                 if(dragLength.isAlmostZero()) {
                     println("drag it")
