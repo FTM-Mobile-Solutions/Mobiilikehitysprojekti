@@ -1,6 +1,8 @@
+
 import com.soywiz.klock.*
 import com.soywiz.korau.sound.*
 import com.soywiz.korev.*
+import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
@@ -26,6 +28,8 @@ class GameScene : Scene() {
     private var facingRight = false
     private var gameOver = false
     private var playerHit = false
+    private lateinit var touchPad: SolidRect
+    private lateinit var touchPad2: SolidRect
 
     override suspend fun SContainer.sceneInit() {
         camera = cameraContainer(views.virtualWidthDouble, views.virtualHeightDouble)
@@ -54,6 +58,15 @@ class GameScene : Scene() {
 
 
         levelchanger(lvl)
+
+        touchPad = solidRect(width = 180, height = views.virtualHeight * 2) {
+            alpha = 0.5
+            position(0, 400)
+        }
+        touchPad2 = solidRect(width = 180, height = views.virtualHeight * 2) {
+            alpha = 0.5
+            position(180, 400)
+        }
 
         addUpdater { update(it) }
     }
@@ -137,6 +150,22 @@ class GameScene : Scene() {
         velocityY += gravity * dt.seconds
         player.y += velocityY * dt.seconds
         velocityY = minOf(velocityY, 1000.0)
+
+        touchPad.onClick {
+            player.jumping = true
+            facingRight = true
+            player.jumpForce = 500.0
+            player.jumpDistance = 100.0
+            velocityY = -player.jumpForce
+        }
+
+        touchPad2.onClick {
+            player.jumping = true
+            facingRight = false
+            player.jumpForce = 500.0
+            player.jumpDistance = 100.0
+            velocityY = -player.jumpForce
+        }
 
         if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
             player.jumping = true
