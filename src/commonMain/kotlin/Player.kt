@@ -1,5 +1,6 @@
 import com.soywiz.korau.sound.*
 import com.soywiz.korge.view.*
+import com.soywiz.korim.bitmap.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
@@ -14,19 +15,26 @@ class Player : Container() {
     }
 
     var lives = 3
-    var moveSpeed = 100.0
     var jumping = false
     var jumpForce = 0.0
     var jumpDistance = 0.0
+    lateinit var playerBitmap: Bitmap
+    lateinit var playerlBitmap: Bitmap
+    lateinit var playerleftBitmap: Bitmap
+    lateinit var playerrightBitmap: Bitmap
     private var velocityY: Double = 0.0
     private var velocityX: Double = 0.0
     lateinit var state: State
 
-    suspend fun load() {
+    suspend fun idle_right() {
         state = State.LOAD
-        val playerBitmap = loadImage("player.png")
+        playerBitmap = loadImage("player.png")
         val image = image(playerBitmap)
-        println(state)
+    }
+    suspend fun idle_left() {
+        state = State.LOAD
+        playerlBitmap = loadImage("playerl.png")
+        val image = image(playerlBitmap)
     }
 
         fun loseHealth() {
@@ -65,11 +73,22 @@ class Player : Container() {
             state = State.MOVING
         }
 
-        fun moving() {
-            state = State.MOVING
-
-            println(state)
+        suspend fun left() {
+            playerleftBitmap = loadImage("player_left.png")
+            val image = image(playerleftBitmap)
         }
+        suspend fun right() {
+            playerrightBitmap = loadImage("player_right.png")
+            val image = image(playerrightBitmap)
+    }
+    suspend fun jumpleft() {
+        playerleftBitmap = loadImage("player_jumping_left.png")
+        val image = image(playerleftBitmap)
+    }
+    suspend fun jumpright() {
+        playerrightBitmap = loadImage("player_jumping_right.png")
+        val image = image(playerrightBitmap)
+    }
 
         fun hurt() {
             state = State.HURT

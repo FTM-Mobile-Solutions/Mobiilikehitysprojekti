@@ -1,9 +1,7 @@
-
 import com.soywiz.klock.*
 import com.soywiz.kmem.*
 import com.soywiz.korau.sound.*
 import com.soywiz.korev.*
-import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
@@ -39,7 +37,7 @@ class GameScene : Scene() {
         level = Level()
 
         player = Player()
-        player.load()
+        player.right()
 
         health = Health()
         health.createHearts()
@@ -94,8 +92,9 @@ class GameScene : Scene() {
         }
         when (levelnum) {
             1 -> {
-                enemy.createBat(64, 1100)
-                level.level2()
+                enemy.createBat(64, 1050)
+                enemy.createBat(64, 650)
+                level.level1()
                 level.setColor(Colors.LIGHTBLUE)
             }
             2 -> {
@@ -267,6 +266,7 @@ class GameScene : Scene() {
 
         if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
             player.jumping = true
+            launch { player.idle_right() }
             facingRight = true
             player.jumpForce = 500.0
             player.jumpDistance = 100.0
@@ -299,6 +299,7 @@ class GameScene : Scene() {
 
         if (views.input.keys.justPressed(Key.LEFT) && !player.jumping) {
             player.jumping = true
+            launch { player.idle_left() }
             facingRight = false
             player.jumpForce = 500.0
             player.jumpDistance = 100.0
@@ -372,8 +373,8 @@ class GameScene : Scene() {
                 velocityY = -velocityY / 2
             }
         }
-
-        if (player.collidesWith(enemy)) {
+        for (enemyhb in enemy.enemyHitboxes)
+        if (player.collidesWith(enemyhb)) {
             if (!playerHit) {
                 health.removeHeart()
                 playerHit = true
@@ -389,7 +390,7 @@ class GameScene : Scene() {
                 }
             }
         }
-        if (player.y > 1400) {
+        if (player.y > 1400) { // if player is out of bounds reset player position
             player.position(120, 1370)
         }
         if (player.collidesWith(level.rightwallHitbox)) {
