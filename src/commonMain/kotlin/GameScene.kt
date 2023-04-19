@@ -1,5 +1,6 @@
 
 import com.soywiz.klock.*
+import com.soywiz.kmem.*
 import com.soywiz.korau.sound.*
 import com.soywiz.korev.*
 import com.soywiz.korge.input.*
@@ -10,6 +11,7 @@ import com.soywiz.korge.view.camera.*
 import com.soywiz.korim.color.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
+import com.soywiz.korma.geom.*
 
 class GameScene : Scene() {
     private lateinit var player: Player
@@ -59,11 +61,11 @@ class GameScene : Scene() {
 
         levelchanger(lvl)
 
-        touchPad = solidRect(width = 180, height = views.virtualHeight * 2) {
+        touchPad = solidRect(width = 90, height = views.virtualHeight * 2) {
             alpha = 0.5
-            position(0, 400)
+            position(90, 400)
         }
-        touchPad2 = solidRect(width = 180, height = views.virtualHeight * 2) {
+        touchPad2 = solidRect(width = 90, height = views.virtualHeight * 2) {
             alpha = 0.5
             position(180, 400)
         }
@@ -106,6 +108,12 @@ class GameScene : Scene() {
     private fun update(dt: TimeSpan) {
         if (gameOver) {
             return // Stop updating the game
+        }
+
+        if (player.y >= level.groundHitbox.y) {
+            player.jumping = false
+            velocityY = 0.0
+            player.y = level.groundHitbox.y
         }
         checkInput(dt)
         checkCollisions()
@@ -151,13 +159,73 @@ class GameScene : Scene() {
         player.y += velocityY * dt.seconds
         velocityY = minOf(velocityY, 1000.0)
 
-        touchPad.onClick {
+        var touchStartPos = Point()
+        var touchEndPos = Point()
+        var jumped = false
+
+        touchPad.onDown {
+            touchStartPos = views.globalMouseXY
+        }
+
+        touchPad.onMouseDrag {
+            if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
+                player.jumping = true
+                facingRight = true
+                // Calculate length of mouse drag
+                val dragLength = touchEndPos.distanceTo(touchStartPos)
+                print(dragLength)
+                if(dragLength.isAlmostZero()) {
+                    println("drag it")
+                }
+                // Adjust jumpPower and jumpDistance based on drag length
+                player.jumpForce = 500 + (dragLength / 2.0).coerceAtMost(750.0)
+                player.jumpDistance = 100 + (dragLength / 4.0).coerceAtMost(200.0)
+                println("Jump Power: ${player.jumpForce}, Jump Distance: ${player.jumpDistance}")
+                jumped = true
+            }
+        }
+
+        touchPad.onUp {
+            touchEndPos = views.globalMouseXY
+        }
+
+        touchPad.onUpOutside {
+            if (!player.jumping && jumped) {
+                player.jumping = true
+                velocityY = -player.jumpForce
+            }
+            jumped = false
+        }
+
+        /*touchPad2.onMouseDrag {
+            if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
+                player.jumping = true
+                facingRight = false
+                // Calculate length of mouse drag
+                val dragLength = views.globalMouseXY.distanceTo(touchStartPos)
+                // Adjust jumpPower and jumpDistance based on drag length
+                player.jumpForce = 500 + (dragLength / 2.0).coerceAtMost(750.0)
+                player.jumpDistance = 100 + (dragLength / 4.0).coerceAtMost(200.0)
+                println("Jump Power: ${player.jumpForce}, Jump Distance: ${player.jumpDistance}")
+                jumped = true
+            }
+        }
+        touchPad2.onUpOutside {
+            if (!player.jumping && jumped) {
+                player.jumping = true
+                velocityY = -player.jumpForce
+            }
+            jumped = false
+        }*/
+
+        /*touchPad.onClick {
             player.jumping = true
             facingRight = true
             player.jumpForce = 500.0
             player.jumpDistance = 100.0
             velocityY = -player.jumpForce
-        }
+        }*/
+        //views.input.touch.isEnd
 
         touchPad2.onClick {
             player.jumping = true
@@ -265,7 +333,7 @@ class GameScene : Scene() {
 
             if (hitbox.collidesWith(player) && playerBottom > hitboxTop) {
                 player.y = hitbox.y - player.height
-                println(player.y)
+                //println(player.y)
                 player.jumping = false
                 isOnGround = true
             }
