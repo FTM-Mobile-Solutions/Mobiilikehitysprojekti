@@ -20,6 +20,7 @@ class Level : Container() {
     private lateinit var platform: Bitmap
     private lateinit var platform_small: Bitmap
     private lateinit var goal: Bitmap
+    private var color = Colors.GHOSTWHITE
      lateinit var goalHitbox: SolidRect
      lateinit var groundHitbox: SolidRect
      lateinit var leftwallHitbox: SolidRect
@@ -36,23 +37,23 @@ class Level : Container() {
 
         bg = loadImage("tiles/bg.png")
         val bgimage = image(bg) {
-            tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(0, 736)
         }
         val bgimage_cont = image(bg) {
-            tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(0, 0)
         }
         ground = loadImage("tiles/floor64.png")
         val groundimage = image(ground) {
-//            tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(0,1408)
         }
         val groundimagecont = image(ground) {
-//            tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(0,1472)
         }
@@ -62,23 +63,23 @@ class Level : Container() {
         }
         rightwall = loadImage("tiles/wall64.png")
         val rightwallimage = image(rightwall) {
-            //tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(332,576)
         }
         val rightwallimagecont = image(rightwall) {
-            //tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(332, 0)
         }
         leftwall = loadImage("tiles/wall64.png")
         val leftwallimage = image(rightwall) {
-            //tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(-32,576)
         }
         val leftwallimagecont = image(rightwall) {
-            //tint = Colors.LIGHTSLATEGREY
+            tint = getColor()
             smoothing = false
             position(-32,0)
         }
@@ -122,15 +123,14 @@ class Level : Container() {
         state = State.LEVEL_2
         //platformit kentän pohjalta ylöspäin
         createplatform(200, 1300)
-        createplatform(75, 1200)
-        createplatform(100, 1100)
-//        createplatform_small(200, 1000)
-//        createplatform_small(75, 800)
-//        createplatform_small(40, 660)
-//        createplatform_small(200, 650)
-//        createplatform_small(200, 650)
-//        createplatform_small(40, 500)
-//        createplatform(200, 400)
+        createplatform_small(75, 1170)
+        createplatform_small(200, 970)
+        createplatform_small(40, 870)
+        createplatform_small(125, 750)
+        createplatform_small(40, 600)
+        createplatform_small(235, 500)
+        createplatform_small(135, 400)
+        createplatform(40, 365)
         val addGoal = platformHitboxes.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
@@ -159,6 +159,7 @@ class Level : Container() {
         goal = loadImage("goal.png")
         val goalimage = image(goal) {
             smoothing = false
+            tint = getColor()
             position(gx, gy)
         }
         goalHitbox = solidRect(width = goal.width, height = goal.height) {
@@ -172,6 +173,7 @@ class Level : Container() {
         platform = loadImage("tiles/platform.png")
         val platformimage = image(platform) {
             smoothing = false
+            tint = getColor()
             position(gx, gy)
         }
         val platformHitbox = solidRect(width = platform.width, height = platform.height) {
@@ -184,6 +186,7 @@ class Level : Container() {
     suspend fun createplatform_small(gx:Int, gy:Int) {
         platform_small = loadImage("tiles/platform_small.png")
         val platformimage = image(platform_small) {
+            tint = getColor()
             smoothing = false
             position(gx, gy)
         }
@@ -192,6 +195,12 @@ class Level : Container() {
             position(gx, gy)
         }
         platformHitboxes.add(platform_smallHitbox)
+    }
+    fun setColor(tint: RGBA) {
+        this.color = tint
+    }
+    fun getColor():RGBA {
+        return color
     }
 }
 

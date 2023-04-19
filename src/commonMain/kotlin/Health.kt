@@ -2,14 +2,16 @@ import com.soywiz.korge.view.*
 
 class Health: Container() {
     private val heartWidth = 30
+    private var gap = 40
     private val heartImages = mutableListOf<Image>()
 
     suspend fun createHearts() {
         for (i in 0..2) {
             val heart = loadImage("heart.png")
             val heartImage = image(heart) {
-                position(30 + i * heartWidth, 1200)
+                position(gap + i * heartWidth, 440)
             }
+            gap += 5
             heartImages.add(heartImage)
         }
     }

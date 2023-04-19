@@ -5,14 +5,11 @@ class Enemy : Container() {
 
     lateinit var enemy: Bitmap
     val enemyHitboxes = mutableListOf<SolidRect>()
-    var lives: Int = 1
-    //var velocityX = 100.0
-    var jumping = false
     private var velocityY: Double = 30.0
     private var velocityX: Double = 100.0
 
     suspend fun load() {
-//        createBat(64, 400)
+//        createBat(64, 1280)
 //        createBat(64, 500)
 //        createBat(64, 600)
 //        createBat(64,1300)

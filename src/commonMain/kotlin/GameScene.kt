@@ -5,6 +5,7 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.camera.*
+import com.soywiz.korim.color.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
 
@@ -46,10 +47,10 @@ class GameScene : Scene() {
         camera.addChild(level)
         camera.addChild(player)
         camera.addChild(enemy)
-        camera.addChild(health)
         camera.addChild(coin)
 
         addChild(camera)
+        addChild(health)
 
 
         levelchanger(lvl)
@@ -77,10 +78,15 @@ class GameScene : Scene() {
 
         }
         when (levelnum) {
-            1 -> level.level2()
-            2 -> level.level2()
-            3 -> level.level3()
-
+            1 -> {
+                enemy.createBat(64, 1100)
+                level.level2()
+                level.setColor(Colors.LIGHTBLUE)
+            }
+            2 -> {
+                level.level2()
+                level.setColor(Colors.LIGHTSTEELBLUE)
+            }
         }
     }
 
@@ -213,7 +219,6 @@ class GameScene : Scene() {
 //        }
     }
 
-
     private fun checkCollisions() {
         val playerTop = player.y
         val playerBottom = player.y + player.height
@@ -240,40 +245,7 @@ class GameScene : Scene() {
                 velocityY = -velocityY / 2
             }
         }
-//        for (hitbox in level.platformHitboxes) {
-//                val playerTop = player.y
-//                val playerBottom = player.y + player.height
-//                val playerLeft = player.x
-//                val playerRight = player.x + player.width
-//                val hitboxTop = hitbox.y
-//                val hitboxBottom = hitbox.y + hitbox.height
-//                val hitboxLeft = hitbox.x
-//                val hitboxRight = hitbox.x + hitbox.width
-//                println(playerBottom)
-//            isOnPlatform = player.collidesWith(hitbox)
-//            if (isOnPlatform) {
-//                if (playerBottom > hitboxTop && playerTop < hitboxTop) {
-//                    // Set player's y position to just above the platform hitbox
-//                    player.y = hitboxTop - player.height
-//                    player.jumping = false
-//                    isOnGround = true
-//                } else if (playerTop < hitboxBottom && playerBottom > hitboxBottom) {
-//                    // Set player's y position to just below the platform hitbox
-//                    player.y = hitboxBottom
-//                    velocityY = -velocityY / 2
-//                } else if (playerRight > hitboxLeft && playerLeft < hitboxLeft && playerBottom > hitboxTop && playerTop < hitboxBottom) {
-//                    // Set player's x position to just left of the platform hitbox
-//                    player.x = hitboxLeft - player.width
-//                    player.setVelocityX(0.0)
-//                    player.setVelocityY(0.0)
-//                } else if (playerLeft < hitboxRight && playerRight > hitboxRight && playerBottom > hitboxTop && playerTop < hitboxBottom) {
-//                    // Set player's x position to just right of the platform hitbox
-//                    player.x = hitboxRight
-//                    player.setVelocityX(0.0)
-//                    player.setVelocityY(0.0)
-//                }
-//            }
-//        }
+
         if (player.collidesWith(enemy)) {
             if (!playerHit) {
                 health.removeHeart()
