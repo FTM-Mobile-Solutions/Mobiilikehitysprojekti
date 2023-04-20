@@ -163,6 +163,14 @@ class GameScene : Scene() {
         var touchEndPos = Point()
         var jumped = false
 
+        fun setEPos() {
+            touchEndPos = views.globalMouseXY
+        }
+
+        fun getEPos(): Point {
+            return touchEndPos
+        }
+
         fun setPos() {
             touchStartPos = views.globalMouseXY
         }
@@ -170,12 +178,9 @@ class GameScene : Scene() {
         fun getPos(): Point {
             return touchStartPos
         }
-
         touchPad.onDown outer@{
-            setPos()
-            if(player.jumpForce < 500.0) {
-                return@outer
-            }
+                setPos()
+                //setEPos()
         }
         touchPad.onMouseDrag {
             if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
@@ -183,10 +188,12 @@ class GameScene : Scene() {
                 facingRight = true
                 //var pos = getPos()
                 // Calculate length of mouse drag
-                var dragLength = touchEndPos.distanceTo(getPos())
+                var dragLength = getEPos().distanceTo(getPos())
                 print(dragLength)
-                if(dragLength.isAlmostZero()) {
+                println("kotner")
+                if (dragLength.isAlmostZero()) {
                     println("drag it")
+                //return@onMouseDrag
                 }
                 // Adjust jumpPower and jumpDistance based on drag length
                 player.jumpForce = 500 + (dragLength / 2.0).coerceAtMost(750.0)
@@ -196,9 +203,9 @@ class GameScene : Scene() {
             }
         }
 
-        touchPad.onUp {
-            touchEndPos = views.globalMouseXY
-        }
+            /*touchPad.onUp {
+                touchEndPos = views.globalMouseXY
+            }*/
 
         touchPad.onUpOutside {
             if (!player.jumping && jumped) {
@@ -208,12 +215,19 @@ class GameScene : Scene() {
             jumped = false
         }
 
-        /*touchPad2.onMouseDrag {
+        touchPad2.onMouseDrag {
             if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
                 player.jumping = true
                 facingRight = false
+                //var pos = getPos()
                 // Calculate length of mouse drag
-                val dragLength = views.globalMouseXY.distanceTo(touchStartPos)
+                var dragLength = getEPos().distanceTo(getPos())
+                print(dragLength)
+                println("kotner")
+                if (dragLength.isAlmostZero()) {
+                    println("drag it")
+                    //return@onMouseDrag
+                }
                 // Adjust jumpPower and jumpDistance based on drag length
                 player.jumpForce = 500 + (dragLength / 2.0).coerceAtMost(750.0)
                 player.jumpDistance = 100 + (dragLength / 4.0).coerceAtMost(200.0)
@@ -227,7 +241,7 @@ class GameScene : Scene() {
                 velocityY = -player.jumpForce
             }
             jumped = false
-        }*/
+        }
 
         /*touchPad.onClick {
             player.jumping = true
@@ -238,13 +252,13 @@ class GameScene : Scene() {
         }*/
         //views.input.touch.isEnd
 
-        touchPad2.onClick {
+        /*touchPad2.onClick {
             player.jumping = true
             facingRight = false
             player.jumpForce = 500.0
             player.jumpDistance = 100.0
             velocityY = -player.jumpForce
-        }
+        }*/
 
         if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
             player.jumping = true
