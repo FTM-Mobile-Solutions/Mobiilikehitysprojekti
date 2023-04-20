@@ -1,15 +1,12 @@
+
 import com.soywiz.klock.*
 import com.soywiz.korau.sound.*
-import com.soywiz.korge.animate.*
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
-import com.soywiz.korge.view.onClick
 import com.soywiz.korim.format.*
-import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
-import com.soywiz.korma.geom.*
 
 class MainScene : Scene() {
     private lateinit var bg: Image
@@ -39,7 +36,7 @@ class MainScene : Scene() {
             sceneContainer.changeTo<GameScene>()
         }
         optionsButton.onClick {
-            tune.volume = 0.0
+            sceneContainer.changeTo<OptionsScene>()
         }
     }
     override suspend fun sceneAfterInit() {

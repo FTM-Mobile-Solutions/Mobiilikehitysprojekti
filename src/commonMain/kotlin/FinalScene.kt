@@ -20,7 +20,6 @@ class FinalScene : Scene() {
         mainMenuText = text("Hyvin pelattu!", textSize = 24.0) {
             centerOnStage()
             tint = Colors.RED
-            y += 150
             alpha = 0.0
         }
     }

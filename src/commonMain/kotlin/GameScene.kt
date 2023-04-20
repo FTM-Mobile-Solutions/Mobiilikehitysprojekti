@@ -1,3 +1,4 @@
+
 import com.soywiz.klock.*
 import com.soywiz.kmem.*
 import com.soywiz.korau.sound.*
@@ -7,7 +8,6 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.camera.*
-import com.soywiz.korge.view.onClick
 import com.soywiz.korim.color.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
@@ -192,6 +192,7 @@ class GameScene : Scene() {
             if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
                 player.jumping = true
                 facingRight = true
+                launch { player.idle_right() }
                 //var pos = getPos()
                 // Calculate length of mouse drag
                 var dragLength = getEPos().distanceTo(getPos())
@@ -225,6 +226,7 @@ class GameScene : Scene() {
             if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
                 player.jumping = true
                 facingRight = false
+                launch { player.idle_left() }
                 //var pos = getPos()
                 // Calculate length of mouse drag
                 var dragLength = getEPos().distanceTo(getPos())
@@ -269,7 +271,7 @@ class GameScene : Scene() {
         if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
             player.jumping = true
             launch { player.idle_right() }
-            facingRight = true
+            facingRight = false
             player.jumpForce = 500.0
             player.jumpDistance = 100.0
         }
