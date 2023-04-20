@@ -102,6 +102,9 @@ class GameScene : Scene() {
                 level.level2()
                 level.setColor(Colors.LIGHTSTEELBLUE)
             }
+            4 -> {
+                sceneContainer.changeTo<FinalScene>()
+            }
         }
     }
 
