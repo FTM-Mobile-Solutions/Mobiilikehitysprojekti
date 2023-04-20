@@ -168,6 +168,7 @@ class GameScene : Scene() {
         }
 
         fun getEPos(): Point {
+            println("konapask" + touchEndPos)
             return touchEndPos
         }
 
@@ -176,6 +177,7 @@ class GameScene : Scene() {
         }
 
         fun getPos(): Point {
+            println("konakuoma" + touchStartPos)
             return touchStartPos
         }
         touchPad.onDown outer@{
