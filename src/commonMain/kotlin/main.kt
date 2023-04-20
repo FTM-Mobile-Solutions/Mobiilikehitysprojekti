@@ -13,7 +13,7 @@ object MainModule : Module() {
     override val mainScene: KClass<out Scene>
         get() = SplashScreen::class
     override val title: String
-        get() = "Konapeli"
+        get() = "Arthur"
     override val size: SizeInt
         get() = SizeInt(360, 1600)
     override val scaleMode: ScaleMode

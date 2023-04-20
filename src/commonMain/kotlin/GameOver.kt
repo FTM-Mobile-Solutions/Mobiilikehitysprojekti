@@ -30,22 +30,23 @@ class GameOver: Scene() {
         go = image(resourcesVfs["gameover.png"].readBitmap()) {
             //position(views.virtualWidth/2, views.virtualHeight/2)
             centerOnStage()
+            y -= 100
             smoothing = false
             alpha = 0.0
         }
 
         playAgainText = text("Play Again?", textSize = 24.0) {
             centerOnStage()
-            tint = Colors.RED
-            y += 100.0
+            tint = Colors.DARKRED
+            y += 25.0
             alpha = 0.0
             font = gameFont
         }
 
         mainMenuText = text("Main Menu", textSize = 24.0) {
             centerOnStage()
-            tint = Colors.RED
-            y += 150
+            tint = Colors.DARKRED
+            y += 75
             alpha = 0.0
             font = gameFont
         }
