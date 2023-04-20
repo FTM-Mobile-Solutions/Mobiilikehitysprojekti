@@ -183,7 +183,6 @@ class GameScene : Scene() {
         }
 
         fun getEPos(): Point {
-            println("konapask" + touchEndPos)
             return touchEndPos
         }
 
@@ -192,7 +191,6 @@ class GameScene : Scene() {
         }
 
         fun getPos(): Point {
-            println("konakuoma" + touchStartPos)
             return touchStartPos
         }
         touchPad.onDown outer@{
@@ -207,8 +205,6 @@ class GameScene : Scene() {
                 //var pos = getPos()
                 // Calculate length of mouse drag
                 var dragLength = getEPos().distanceTo(getPos())
-                print(dragLength)
-                println("kotner")
                 if (dragLength.isAlmostZero()) {
                     println("drag it")
                 //return@onMouseDrag
@@ -241,8 +237,6 @@ class GameScene : Scene() {
                 //var pos = getPos()
                 // Calculate length of mouse drag
                 var dragLength = getEPos().distanceTo(getPos())
-                print(dragLength)
-                println("kotner")
                 if (dragLength.isAlmostZero()) {
                     println("drag it")
                     //return@onMouseDrag
@@ -282,7 +276,7 @@ class GameScene : Scene() {
         if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
             player.jumping = true
             launch { player.idle_right() }
-            facingRight = false
+            facingRight = true
             player.jumpForce = 500.0
             player.jumpDistance = 100.0
         }

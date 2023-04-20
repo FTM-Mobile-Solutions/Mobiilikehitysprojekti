@@ -63,7 +63,7 @@ class MainScene : Scene() {
     override suspend fun sceneBeforeLeaving() {
         bg.tween(bg::alpha[0.0], time = .5.seconds)
         playButton.tween(playButton::alpha[0.0], playButton::scale[0.0], time = .5.seconds)
-        title.tween(title::alpha[0.0], time = 1.seconds)
+        title.tween(title::alpha[0.0], time = 0.5.seconds)
         optionsButton.tween(optionsButton::alpha[0.0], optionsButton::scale[0.0], time = .5.seconds)
         sceneContainer.tween(tune::volume[0.0], time = .4.seconds)
         tune.stop()

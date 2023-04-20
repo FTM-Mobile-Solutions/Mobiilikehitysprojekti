@@ -32,31 +32,31 @@ class OptionsScene : Scene() {
         }
         info1 = text("Game controls:", textSize = 24.0) {
             centerOnStage()
+            y -= 150
             tint = Colors.GHOSTWHITE
             alpha = 0.0
         }
         info2 = text("Swipe or tap the preferred side.", textSize = 24.0) {
             centerOnStage()
             tint = Colors.GHOSTWHITE
-            y += 50
+            y -= 100
             alpha = 0.0
         }
         info3 = text("For example: ", textSize = 24.0) {
             centerOnStage()
             tint = Colors.GHOSTWHITE
-            y += 100
+            y -= 50
             alpha = 0.0
         }
         info4 = text("if player wants to jump right, ", textSize = 24.0) {
             centerOnStage()
             tint = Colors.GHOSTWHITE
-            y += 150
             alpha = 0.0
         }
         info5 = text("tap or swipe from the left side.", textSize = 24.0) {
             centerOnStage()
             tint = Colors.GHOSTWHITE
-            y += 200
+            y += 50
             alpha = 0.0
         }
         back.onClick {
