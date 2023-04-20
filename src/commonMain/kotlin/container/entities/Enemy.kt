@@ -1,5 +1,8 @@
+package container.entities
+
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.*
+import loadImage
 
 class Enemy : Container() {
 
@@ -31,7 +34,7 @@ class Enemy : Container() {
     }
 
     suspend fun createBat(gx:Int, gy:Int) {
-        enemy = loadImage("enemy.png")
+        enemy = loadImage("entities/enemy.png")
         val enemyBitmap = image(enemy) {
             smoothing = false
             position(gx, gy)

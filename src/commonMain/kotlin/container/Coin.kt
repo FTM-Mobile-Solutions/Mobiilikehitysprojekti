@@ -1,21 +1,39 @@
+package container
+
 import com.soywiz.korge.view.*
-import kotlin.random.Random
+import loadImage
 
 class Coin: Container()  {
 
      var coinCounter = 0
-    var points = 0
-     val coinBitmaps = mutableMapOf<String, Image>()
-     val coinHitboxes = mutableMapOf<String, SolidRect>()
+     private var points = 0
+     private val coinBitmaps = mutableMapOf<String, Image>()
+     private val coinHitboxes = mutableMapOf<String, SolidRect>()
 
-    suspend fun load(amount: Int) {
-        val random = Random.Default
-        //println(amount)
+    suspend fun level1_coins() {
+        createCoin(255, 1290)
+        createCoin(40, 1100)
 
-//        for (i in 1..amount) {
-//            val x = random.nextInt(64, 200)
-//            val y = random.nextInt(500, 1000)
-            createCoin(220, 1300)
+        createCoin(40, 900)
+
+        createCoin(290, 850)
+        createCoin(290, 800)
+        createCoin(290, 750)
+    }
+
+    suspend fun level2_coins() {
+        createCoin(250, 1270)
+
+        createCoin(40, 950)
+
+        createCoin(290, 850)
+        createCoin(290, 800)
+        createCoin(290, 750)
+
+        createCoin(290, 600)
+        createCoin(290, 650)
+
+        createCoin(160, 475)
     }
 
     /*suspend fun load(coordinates: Array<Pair<Int, Int>>) {
@@ -24,7 +42,7 @@ class Coin: Container()  {
         for ((gx, gy) in coordinates) {
             createCoin(gx, gy)
         }
-        val coin = Coin()
+        val coin = Container.Coin()
         val coordinates = arrayOf(
             Pair(100, 200),
             Pair(500, 300),
@@ -36,7 +54,7 @@ class Coin: Container()  {
 
 
     suspend fun createCoin(gx: Int, gy: Int) {
-        val coin = loadImage("coin.png")
+        val coin = loadImage("miscellaneous/coin.png")
         val coinBitmap = image(coin) {
             smoothing = false
             position(gx, gy)
@@ -57,12 +75,13 @@ class Coin: Container()  {
                 val coinBitmap = coinBitmaps[coinName]
                 coinBitmap?.removeFromParent()
                 points++
+                coinCounter--
 
                 coinHitbox.removeFromParent()
 
                 coinBitmaps.remove(coinName)
                 coinHitboxes.remove(coinName)
-                break;
+                break
 
             }
         }

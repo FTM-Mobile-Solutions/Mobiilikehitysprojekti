@@ -22,22 +22,22 @@ class loadImage {
     private lateinit var goal: Bitmap
 
     suspend fun init() {
-        playerImage = loadImage("player.png")
-        playerlImage = loadImage("playerl.png")
+        playerImage = loadImage("entities/player.png")
+        playerlImage = loadImage("entities/playerl.png")
         playerleftImage = loadImage("player_left.png")
         playerrightImage = loadImage("player_right.png")
         playerjumpleftImage = loadImage("player_jumping_left.png")
         playerjumprightImage = loadImage("player_jumping_right.png")
-        enemyImage = loadImage("enemy.png")
+        enemyImage = loadImage("entities/enemy.png")
         bgImage = loadImage("testibg.png")
         groundBitmap = loadImage("tiles/bg.png")
-        goImage = loadImage("gameover.png")
+        goImage = loadImage("miscellaneous/gameover.png")
         platformBitmap = loadImage("tiles/platform.png")
 //        floor = loadImage("tiles/floor_green.png")
         floor = loadImage("tiles/floor64.png")
         wall = loadImage("tiles/wall64.png")
-        play = loadImage("startbutton.png")
-        play = loadImage("goal.png")
+        play = loadImage("miscellaneous/startbutton.png")
+        play = loadImage("tiles/goal.png")
 //        wall = loadImage("tiles/wall_green.png")
     }
 }

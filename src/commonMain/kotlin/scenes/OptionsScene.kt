@@ -1,4 +1,4 @@
-
+package scenes
 import com.soywiz.klock.*
 import com.soywiz.korau.sound.*
 import com.soywiz.korge.input.*
@@ -21,7 +21,7 @@ class OptionsScene : Scene() {
     private lateinit var info5: Text
     override suspend fun SContainer.sceneInit() {
 
-        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
+        val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             centerOnStage()
             smoothing = false
@@ -75,7 +75,7 @@ class OptionsScene : Scene() {
 
     override suspend fun sceneAfterInit() {
         super.sceneAfterInit()
-        tune = resourcesVfs["gamesong.wav"].readMusic().play()
+        tune = resourcesVfs["sfx/gamesong.wav"].readMusic().play()
         tune.volume = 0.1
         sceneContainer.tween(tune::volume[0.1], time = 1.5.seconds)
         bg.tween(bg::alpha[1.0], time = 0.7.seconds)

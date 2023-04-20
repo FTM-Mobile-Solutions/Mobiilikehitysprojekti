@@ -4,6 +4,7 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korim.color.*
 import com.soywiz.korinject.*
 import com.soywiz.korma.geom.*
+import scenes.*
 import kotlin.reflect.*
 
 

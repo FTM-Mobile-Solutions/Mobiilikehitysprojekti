@@ -1,4 +1,10 @@
+package scenes
 
+import container.Coin
+import container.entities.Enemy
+import container.Health
+import container.Level
+import container.entities.Player
 import com.soywiz.klock.*
 import com.soywiz.kmem.*
 import com.soywiz.korau.sound.*
@@ -12,7 +18,6 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
-import com.soywiz.korio.stream.*
 import com.soywiz.korma.geom.*
 
 class GameScene : Scene() {
@@ -24,6 +29,7 @@ class GameScene : Scene() {
     private lateinit var camera: CameraContainer
     private lateinit var tune: SoundChannel
     private lateinit var points: Text
+    private lateinit var info: Text
     private var lvl = 0
     private var x = 0
     private var gravity = 3500.0
@@ -37,19 +43,18 @@ class GameScene : Scene() {
     private lateinit var touchPad2: SolidRect
 
     override suspend fun SContainer.sceneInit() {
-        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
+        val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         camera = cameraContainer(views.virtualWidthDouble, views.virtualHeightDouble)
 
         level = Level()
 
         player = Player()
-        player.right()
+        player.idle_right()
 
         health = Health()
         health.createHearts()
 
         coin = Coin()
-        coin.load(10)
 
         enemy = Enemy()
         enemy.load()
@@ -73,20 +78,29 @@ class GameScene : Scene() {
             alpha = 0.0
             position(180, 400)
         }
-        points = text("Points: ${coin.points}", textSize = 24.0) {
-            position(230,440)
+        points = text("Coins left: ${coin.coinCounter}", textSize = 24.0) {
+            position(220,440)
             smoothing = false
             tint = Colors.WHITESMOKE
             font = gameFont
+        }
+        info = text("  Collect all the coins to advance", textSize = 24.0) {
+            centerOnStage()
+            smoothing = false
+            tint = Colors.WHITESMOKE
+            font = gameFont
+            alpha = 0.0
         }
         addUpdater { update(it) }
     }
 
     override suspend fun sceneAfterInit() {
         super.sceneAfterInit()
-        tune = resourcesVfs["gamesong.wav"].readMusic().playForever()
+        tune = resourcesVfs["sfx/gamesong.wav"].readMusic().playForever()
         tune.volume = 0.0
         sceneContainer.tween(tune::volume[0.8], time = 1.5.seconds)
+        info.tween(info::alpha[1.0], time = 1.seconds)
+        info.tween(info::alpha[0.0], time = 3.seconds)
         player.live()
     }
 
@@ -104,11 +118,13 @@ class GameScene : Scene() {
         }
         when (levelnum) {
             1 -> {
+                coin.level1_coins()
                 enemy.createBat(46, 875)
                 level.level1()
                 level.setColor(Colors.LIGHTGREEN)
             }
             2 -> {
+                coin.level2_coins()
                 enemy.createBat(46, 1050)
                 enemy.createBat(46, 650)
                 level.level2()
@@ -331,7 +347,7 @@ class GameScene : Scene() {
             player.jumping = true
             velocityY = -player.jumpForce
         }
-//        if (player.state == Player.State.MOVING || player.state == Player.State.HURT) {
+//        if (player.state == entities.Player.State.MOVING || player.state == entities.Player.State.HURT) {
 //            if (views.input.keys[Key.LEFT]) {
 //                player.x -= player.moveSpeed * dt.seconds
 //                if (player.x < 50) player.x = 30.0
@@ -366,19 +382,21 @@ class GameScene : Scene() {
             player.jumping = false // reset jumping flag
             isOnPlatform = false
         }
-        for (hitbox in level.platformHitboxes) {
-            val hitboxBottom = hitbox.y + hitbox.height
-            val hitboxTop = hitbox.y
-            isOnPlatform = hitbox.collidesWith(player) && playerBottom > hitboxTop
+        for (hitboxtop in level.platformHitboxestop) {
+            val hitboxTop = hitboxtop.y
+            isOnPlatform = hitboxtop.collidesWith(player) && playerBottom > hitboxTop
 
-            if (hitbox.collidesWith(player) && playerBottom > hitboxTop) {
-                player.y = hitbox.y - player.height
+            if (hitboxtop.collidesWith(player) && playerBottom >= hitboxTop) {
+                player.y = hitboxtop.y - player.height
                 //println(player.y)
                 player.jumping = false
                 isOnGround = true
             }
-            if (hitbox.collidesWith(player) && playerTop < hitboxBottom && playerBottom > hitboxBottom) {
-                player.y = hitbox.y + hitbox.height
+        }
+        for (hitboxbot in level.platformHitboxesbot) {
+            val hitboxBottom = hitboxbot.y + hitboxbot.height
+            if (hitboxbot.collidesWith(player) && playerTop <= hitboxBottom) {
+                player.y = hitboxbot.y + hitboxbot.height
                 velocityY = -velocityY / 2
             }
         }
@@ -410,12 +428,12 @@ class GameScene : Scene() {
         }
         if (player.collidesWith(coin)) {
             coin.checkCollisions(player)
-            points.text = "Points: ${coin.points}"
+            points.text = "Coins left: ${coin.coinCounter}"
 
 
         }
         for (goal in level.goalHitboxes) {
-            if (player.collidesWith(goal) && x == 0) {
+            if (player.collidesWith(goal) && x == 0 && coin.coinCounter == 0) {
                 x = 1
                 launch {
                     levelchanger(0)

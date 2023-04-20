@@ -1,9 +1,10 @@
-import com.soywiz.klock.*
-import com.soywiz.korge.tween.*
+package container
+
+import container.entities.*
 import com.soywiz.korge.view.*
-import com.soywiz.korge.view.tween.*
 import com.soywiz.korim.bitmap.*
 import com.soywiz.korim.color.*
+import loadImage
 
 class Level : Container() {
     enum class State {
@@ -17,15 +18,16 @@ class Level : Container() {
     private lateinit var ground: Bitmap
     private lateinit var leftwall: Bitmap
     private lateinit var rightwall: Bitmap
-    lateinit var platform: Bitmap
-    lateinit var platform_small: Bitmap
+    private lateinit var platform: Bitmap
+    private lateinit var platform_small: Bitmap
     private lateinit var goal: Bitmap
     private var color = Colors.GHOSTWHITE
-     lateinit var goalHitbox: SolidRect
+     private lateinit var goalHitbox: SolidRect
      lateinit var groundHitbox: SolidRect
      lateinit var leftwallHitbox: SolidRect
      lateinit var rightwallHitbox: SolidRect
-    val platformHitboxes = mutableListOf<SolidRect>()
+    val platformHitboxestop = mutableListOf<SolidRect>()
+    val platformHitboxesbot = mutableListOf<SolidRect>()
     val goalHitboxes = mutableListOf<SolidRect>()
     private lateinit var enemy: Enemy
 
@@ -96,7 +98,8 @@ class Level : Container() {
     }
 
     fun leveldestroyer() {
-        platformHitboxes.clear()
+        platformHitboxestop.clear()
+        platformHitboxesbot.clear()
         goalHitboxes.clear()
     }
 
@@ -113,7 +116,7 @@ class Level : Container() {
         createplatform_small(200, 650)
         createplatform_small(40, 500)
         createplatform(200, 400)
-        val addGoal = platformHitboxes.last()
+        val addGoal = platformHitboxestop.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
@@ -131,7 +134,7 @@ class Level : Container() {
         createplatform_small(235, 500)
         createplatform_small(135, 400)
         createplatform(40, 365)
-        val addGoal = platformHitboxes.last()
+        val addGoal = platformHitboxestop.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
@@ -148,14 +151,14 @@ class Level : Container() {
         createplatform_small(40, 400)
         createplatform(150, 300)
         createplatform(200, 100)
-        val addGoal = platformHitboxes.last()
+        val addGoal = platformHitboxestop.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
     }
 
     suspend fun creategoal(gx:Double, gy:Double) {
-        goal = loadImage("goal.png")
+        goal = loadImage("tiles/goal.png")
         val goalimage = image(goal) {
             smoothing = false
             tint = getColor()
@@ -175,11 +178,17 @@ class Level : Container() {
             tint = getColor()
             position(gx, gy)
         }
-        val platformHitbox = solidRect(width = platform.width, height = platform.height) {
+        val platformHitboxtop = solidRect(width = platform.width, height = platform.height / 2) {
             alpha = 0.0
             position(gx, gy)
         }
-        platformHitboxes.add(platformHitbox)
+        val platformHitboxbot = solidRect(width = platform.width, height = platform.height / 2) {
+            tint = Colors.RED
+            alpha = 0.0
+            position(gx, gy + platform.height / 2)
+        }
+        platformHitboxestop.add(platformHitboxtop)
+        platformHitboxesbot.add(platformHitboxbot)
     }
 
     suspend fun createplatform_small(gx:Int, gy:Int) {
@@ -189,11 +198,17 @@ class Level : Container() {
             smoothing = false
             position(gx, gy)
         }
-        val platform_smallHitbox = solidRect(width = platform_small.width, height = platform_small.height) {
+        val platformsmallHitboxtop = solidRect(width = platform_small.width, height = platform_small.height / 2) {
             alpha = 0.0
             position(gx, gy)
         }
-        platformHitboxes.add(platform_smallHitbox)
+        val platformsmallHitboxbot = solidRect(width = platform_small.width, height = platform_small.height / 2) {
+            tint = Colors.BLUE
+            alpha = 0.0
+            position(gx, gy + platform_small.height / 2)
+        }
+        platformHitboxestop.add(platformsmallHitboxtop)
+        platformHitboxesbot.add(platformsmallHitboxbot)
     }
     fun setColor(tint: RGBA) {
         this.color = tint

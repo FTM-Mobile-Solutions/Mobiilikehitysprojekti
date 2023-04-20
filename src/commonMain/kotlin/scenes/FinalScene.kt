@@ -1,4 +1,4 @@
-
+package scenes
 import com.soywiz.klock.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
@@ -12,7 +12,7 @@ class FinalScene : Scene() {
     private lateinit var bg: Image
     private lateinit var mainMenuText: Text
     override suspend fun SContainer.sceneInit() {
-        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
+        val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             tint = Colors.LIGHTSEAGREEN
             centerOnStage()

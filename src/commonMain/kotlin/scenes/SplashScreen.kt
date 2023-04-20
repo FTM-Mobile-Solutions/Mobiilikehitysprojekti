@@ -1,3 +1,5 @@
+package scenes
+
 import com.soywiz.klock.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
@@ -13,7 +15,7 @@ class SplashScreen : Scene() {
     private lateinit var splashpresent: Text
 
     override suspend fun SContainer.sceneInit() {
-        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
+        val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             centerOnStage()
             tint = Colors.LIGHTSKYBLUE

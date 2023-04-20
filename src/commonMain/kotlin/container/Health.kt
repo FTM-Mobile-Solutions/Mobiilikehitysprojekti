@@ -1,4 +1,7 @@
+package container
+
 import com.soywiz.korge.view.*
+import loadImage
 
 class Health: Container() {
     private val heartWidth = 30
@@ -7,7 +10,7 @@ class Health: Container() {
 
     suspend fun createHearts() {
         for (i in 0..2) {
-            val heart = loadImage("heart.png")
+            val heart = loadImage("miscellaneous/heart.png")
             val heartImage = image(heart) {
                 position(gap + i * heartWidth, 440)
             }

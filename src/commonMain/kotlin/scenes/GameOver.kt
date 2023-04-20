@@ -1,3 +1,5 @@
+package scenes
+
 import com.soywiz.klock.*
 import com.soywiz.korau.sound.*
 import com.soywiz.korge.input.*
@@ -16,7 +18,7 @@ class GameOver: Scene() {
     private lateinit var mainMenuText: Text
     private lateinit var gtune: SoundChannel
     override suspend fun SContainer.sceneInit() {
-        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
+        val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         //tune = resourcesVfs["gameover.wav"].readMusic().play()
         //tune.volume = 0.1
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
@@ -27,7 +29,7 @@ class GameOver: Scene() {
 
         }
 
-        go = image(resourcesVfs["gameover.png"].readBitmap()) {
+        go = image(resourcesVfs["miscellaneous/gameover.png"].readBitmap()) {
             //position(views.virtualWidth/2, views.virtualHeight/2)
             centerOnStage()
             y -= 100
@@ -35,7 +37,7 @@ class GameOver: Scene() {
             alpha = 0.0
         }
 
-        playAgainText = text("Play Again?", textSize = 24.0) {
+        playAgainText = text("Play Again?", textSize = 32.0) {
             centerOnStage()
             tint = Colors.DARKRED
             y += 25.0
@@ -43,7 +45,7 @@ class GameOver: Scene() {
             font = gameFont
         }
 
-        mainMenuText = text("Main Menu", textSize = 24.0) {
+        mainMenuText = text("Main Menu", textSize = 32.0) {
             centerOnStage()
             tint = Colors.DARKRED
             y += 75
@@ -62,7 +64,7 @@ class GameOver: Scene() {
 
     override suspend fun sceneAfterInit() {
         super.sceneAfterInit()
-        gtune = resourcesVfs["gameover.wav"].readMusic().play()
+        gtune = resourcesVfs["sfx/gameover.wav"].readMusic().play()
         gtune.volume = 0.1
         sceneContainer.tween(gtune::volume[0.1], time = 1.5.seconds)
         bg.tween(bg::alpha[1.0], time = 1.seconds)
