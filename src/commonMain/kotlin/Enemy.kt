@@ -9,10 +9,6 @@ class Enemy : Container() {
     private var velocityX: Double = 100.0
 
     suspend fun load() {
-//        createBat(64, 1280)
-//        createBat(64, 500)
-//        createBat(64, 600)
-//        createBat(64,1300)
     }
     fun setVelocityX(velocity: Double) {
         this.velocityX = velocity
@@ -28,6 +24,10 @@ class Enemy : Container() {
 
     fun getVelocityY(): Double {
         return velocityY
+    }
+
+    fun enemydestroyer() {
+        enemyHitboxes.clear()
     }
 
     suspend fun createBat(gx:Int, gy:Int) {

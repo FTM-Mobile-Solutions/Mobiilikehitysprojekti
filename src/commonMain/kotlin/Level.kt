@@ -17,8 +17,8 @@ class Level : Container() {
     private lateinit var ground: Bitmap
     private lateinit var leftwall: Bitmap
     private lateinit var rightwall: Bitmap
-    private lateinit var platform: Bitmap
-    private lateinit var platform_small: Bitmap
+    lateinit var platform: Bitmap
+    lateinit var platform_small: Bitmap
     private lateinit var goal: Bitmap
     private var color = Colors.GHOSTWHITE
      lateinit var goalHitbox: SolidRect
@@ -139,16 +139,15 @@ class Level : Container() {
     suspend fun level3() {
         state = State.LEVEL_3
         //platformit kentän pohjalta ylöspäin
-        createplatform(225, 1325)
-//        createplatform(75, 1200)
-//        createplatform(100, 1100)
-//        createplatform_small(200, 1000)
-//        createplatform_small(75, 800)
-//        createplatform_small(40, 660)
-//        createplatform_small(200, 650)
-//        createplatform_small(200, 650)
-//        createplatform_small(40, 500)
-//        createplatform(200, 400)
+        createplatform_small(135, 1250)
+        createplatform_small(75, 1050)
+        createplatform_small(200, 925)
+        createplatform_small(40, 850)
+        createplatform_small(40, 650)
+        createplatform_small(235, 550)
+        createplatform_small(40, 400)
+        createplatform(150, 300)
+        createplatform(200, 100)
         val addGoal = platformHitboxes.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96

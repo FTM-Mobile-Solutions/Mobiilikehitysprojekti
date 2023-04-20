@@ -9,8 +9,10 @@ import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.camera.*
 import com.soywiz.korim.color.*
+import com.soywiz.korim.font.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.std.*
+import com.soywiz.korio.stream.*
 import com.soywiz.korma.geom.*
 
 class GameScene : Scene() {
@@ -21,6 +23,7 @@ class GameScene : Scene() {
     private lateinit var level: Level
     private lateinit var camera: CameraContainer
     private lateinit var tune: SoundChannel
+    private lateinit var points: Text
     private var lvl = 0
     private var x = 0
     private var gravity = 3500.0
@@ -34,6 +37,7 @@ class GameScene : Scene() {
     private lateinit var touchPad2: SolidRect
 
     override suspend fun SContainer.sceneInit() {
+        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
         camera = cameraContainer(views.virtualWidthDouble, views.virtualHeightDouble)
 
         level = Level()
@@ -45,7 +49,7 @@ class GameScene : Scene() {
         health.createHearts()
 
         coin = Coin()
-        coin.load(15)
+        coin.load(10)
 
         enemy = Enemy()
         enemy.load()
@@ -62,14 +66,19 @@ class GameScene : Scene() {
         levelchanger(lvl)
 
         touchPad = solidRect(width = 90, height = views.virtualHeight * 2) {
-            alpha = 0.5
+            alpha = 0.0
             position(90, 400)
         }
         touchPad2 = solidRect(width = 90, height = views.virtualHeight * 2) {
-            alpha = 0.5
+            alpha = 0.0
             position(180, 400)
         }
-
+        points = text("Points: ${coin.points}", textSize = 24.0) {
+            position(230,440)
+            smoothing = false
+            tint = Colors.WHITESMOKE
+            font = gameFont
+        }
         addUpdater { update(it) }
     }
 
@@ -84,6 +93,7 @@ class GameScene : Scene() {
     private suspend fun levelchanger(levelnum: Int) {
         if (levelnum == 0) {
             level.leveldestroyer()
+            enemy.enemydestroyer()
             level.levelinit()
             lvl++
             println("Changed to level $lvl")
@@ -94,14 +104,21 @@ class GameScene : Scene() {
         }
         when (levelnum) {
             1 -> {
-                enemy.createBat(64, 1050)
-                enemy.createBat(64, 650)
+                enemy.createBat(46, 875)
                 level.level1()
-                level.setColor(Colors.LIGHTBLUE)
+                level.setColor(Colors.LIGHTGREEN)
             }
             2 -> {
+                enemy.createBat(46, 1050)
+                enemy.createBat(46, 650)
                 level.level2()
-                level.setColor(Colors.LIGHTSTEELBLUE)
+                level.setColor(Colors.LIGHTSEAGREEN)
+            }
+            3 -> {
+                enemy.createBat(46, 1100)
+                enemy.createBat(46, 725)
+                enemy.createBat(46, 175)
+                level.level3()
             }
             4 -> {
                 sceneContainer.changeTo<FinalScene>()
@@ -112,12 +129,6 @@ class GameScene : Scene() {
     private fun update(dt: TimeSpan) {
         if (gameOver) {
             return // Stop updating the game
-        }
-
-        if (player.y >= level.groundHitbox.y) {
-            player.jumping = false
-            velocityY = 0.0
-            player.y = level.groundHitbox.y
         }
         checkInput(dt)
         checkCollisions()
@@ -405,6 +416,8 @@ class GameScene : Scene() {
         }
         if (player.collidesWith(coin)) {
             coin.checkCollisions(player)
+            points.text = "Points: ${coin.points}"
+
 
         }
         for (goal in level.goalHitboxes) {

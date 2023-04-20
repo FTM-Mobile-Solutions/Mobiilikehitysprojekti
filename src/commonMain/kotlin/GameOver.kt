@@ -5,6 +5,7 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
+import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
 
@@ -15,6 +16,7 @@ class GameOver: Scene() {
     private lateinit var mainMenuText: Text
     private lateinit var gtune: SoundChannel
     override suspend fun SContainer.sceneInit() {
+        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
         //tune = resourcesVfs["gameover.wav"].readMusic().play()
         //tune.volume = 0.1
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
@@ -37,6 +39,7 @@ class GameOver: Scene() {
             tint = Colors.RED
             y += 100.0
             alpha = 0.0
+            font = gameFont
         }
 
         mainMenuText = text("Main Menu", textSize = 24.0) {
@@ -44,6 +47,7 @@ class GameOver: Scene() {
             tint = Colors.RED
             y += 150
             alpha = 0.0
+            font = gameFont
         }
 
         playAgainText.onClick {

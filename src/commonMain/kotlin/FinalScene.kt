@@ -4,6 +4,7 @@ import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
+import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
 
@@ -11,6 +12,7 @@ class FinalScene : Scene() {
     private lateinit var bg: Image
     private lateinit var mainMenuText: Text
     override suspend fun SContainer.sceneInit() {
+        val gameFont = TtfFont(resourcesVfs["dpcomic.ttf"].readAll())
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             tint = Colors.LIGHTSEAGREEN
             centerOnStage()
@@ -21,6 +23,7 @@ class FinalScene : Scene() {
             centerOnStage()
             tint = Colors.RED
             alpha = 0.0
+            font = gameFont
         }
     }
 

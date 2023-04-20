@@ -3,19 +3,19 @@ import kotlin.random.Random
 
 class Coin: Container()  {
 
-    private var coinCounter = 0
-    private val coinBitmaps = mutableMapOf<String, Image>()
-    private val coinHitboxes = mutableMapOf<String, SolidRect>()
+     var coinCounter = 0
+    var points = 0
+     val coinBitmaps = mutableMapOf<String, Image>()
+     val coinHitboxes = mutableMapOf<String, SolidRect>()
 
     suspend fun load(amount: Int) {
         val random = Random.Default
         //println(amount)
 
-        for (i in 1..amount) {
-            val x = random.nextInt(0, 1000)
-            val y = random.nextInt(0, 1000)
-            createCoin(x, y)
-        }
+//        for (i in 1..amount) {
+//            val x = random.nextInt(64, 200)
+//            val y = random.nextInt(500, 1000)
+            createCoin(220, 1300)
     }
 
     /*suspend fun load(coordinates: Array<Pair<Int, Int>>) {
@@ -56,6 +56,7 @@ class Coin: Container()  {
             if (player.collidesWith(coinHitbox)) {
                 val coinBitmap = coinBitmaps[coinName]
                 coinBitmap?.removeFromParent()
+                points++
 
                 coinHitbox.removeFromParent()
 
