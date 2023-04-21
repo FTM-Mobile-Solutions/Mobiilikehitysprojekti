@@ -32,6 +32,7 @@ class GameScene : Scene() {
     private lateinit var info: Text
     private var lvl = 0
     private var x = 0
+    private var limit = 0
     private var gravity = 3500.0
     private var velocityY = 0.0
     private var isOnGround = false
@@ -43,6 +44,7 @@ class GameScene : Scene() {
     private lateinit var touchPad2: SolidRect
 
     override suspend fun SContainer.sceneInit() {
+        sceneContainer.alpha = 0.0
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         camera = cameraContainer(views.virtualWidthDouble, views.virtualHeightDouble)
 
@@ -54,10 +56,10 @@ class GameScene : Scene() {
         health = Health()
         health.createHearts()
 
-        coin = Coin()
-
         enemy = Enemy()
         enemy.load()
+
+        coin = Coin()
 
         camera.addChild(level)
         camera.addChild(player)
@@ -98,8 +100,9 @@ class GameScene : Scene() {
         super.sceneAfterInit()
         tune = resourcesVfs["sfx/gamesong.wav"].readMusic().playForever()
         tune.volume = 0.0
-        sceneContainer.tween(tune::volume[0.8], time = 1.5.seconds)
-        info.tween(info::alpha[1.0], time = .3.seconds)
+        sceneContainer.tween(tune::volume[0.8], time = 1.seconds)
+        sceneContainer.tween(sceneContainer::alpha[1.0])
+        info.tween(info::alpha[1.0])
         delay(2.seconds)
         info.tween(info::alpha[0.0], time = 3.seconds)
         player.live()
@@ -136,9 +139,10 @@ class GameScene : Scene() {
                 level.setColor(Colors.LIGHTSEAGREEN)
             }
             3 -> {
+                coin.level3_coins()
                 enemy.createBat(46, 1100)
                 enemy.createBat(46, 725)
-                enemy.createBat(46, 175)
+                enemy.createBat(46, 200)
                 level.level3()
             }
         }
@@ -274,25 +278,9 @@ class GameScene : Scene() {
             jumped = false
         }
 
-        /*touchPad.onClick {
-            player.jumping = true
-            facingRight = true
-            player.jumpForce = 500.0
-            player.jumpDistance = 100.0
-            velocityY = -player.jumpForce
-        }*/
-        //views.input.touch.isEnd
-
-        /*touchPad2.onClick {
-            player.jumping = true
-            facingRight = false
-            player.jumpForce = 500.0
-            player.jumpDistance = 100.0
-            velocityY = -player.jumpForce
-        }*/
-
         if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
             player.jumping = true
+            limit = 0
             launch { player.idle_right() }
             facingRight = true
             player.jumpForce = 500.0
@@ -303,10 +291,17 @@ class GameScene : Scene() {
             player.jumping = true
             player.jumpForce += 250 * dt.seconds
             player.jumpDistance += 100 * dt.seconds
-            if (player.jumpForce >= 1250)
+            if (player.jumpForce >= 1250) {
                 player.jumpForce = 1250.0
-            if (player.jumpDistance >= 350)
+                    if (player.jumpForce == 1250.0 && limit == 0) {
+                        limit = 1
+                        launch { player.limitSound() }
+                    }
+            }
+            if (player.jumpDistance >= 350) {
                 player.jumpDistance = 350.0
+            }
+            println(player.jumpForce)
             //println("force:"+player.jumpForce)
             //println("distance:"+player.jumpDistance)
         }
@@ -314,6 +309,7 @@ class GameScene : Scene() {
         if (views.input.keys.justReleased(Key.RIGHT) && !player.jumping) {
             player.jumping = true
             velocityY = -player.jumpForce
+            launch { player.jumpSound() }
         }
 
         if (!isOnGround && facingRight) {
@@ -328,6 +324,7 @@ class GameScene : Scene() {
             player.jumping = true
             launch { player.idle_left() }
             facingRight = false
+            limit = 0
             player.jumpForce = 500.0
             player.jumpDistance = 100.0
 
@@ -337,8 +334,13 @@ class GameScene : Scene() {
             player.jumping = true
             player.jumpForce += 250 * dt.seconds
             player.jumpDistance += 100 * dt.seconds
-            if (player.jumpForce >= 1250)
+            if (player.jumpForce >= 1250) {
                 player.jumpForce = 1250.0
+                if (player.jumpForce == 1250.0 && limit == 0) {
+                    limit = 1
+                    launch { player.limitSound() }
+                }
+            }
             if (player.jumpDistance >= 350)
                 player.jumpDistance = 350.0
             //println("force:"+player.jumpForce)
@@ -348,30 +350,8 @@ class GameScene : Scene() {
         if (views.input.keys.justReleased(Key.LEFT) && !player.jumping) {
             player.jumping = true
             velocityY = -player.jumpForce
+            launch { player.jumpSound() }
         }
-//        if (player.state == entities.containers.Player.State.MOVING || player.state == entities.containers.Player.State.HURT) {
-//            if (views.input.keys[Key.LEFT]) {
-//                player.x -= player.moveSpeed * dt.seconds
-//                if (player.x < 50) player.x = 30.0
-//                if (player.collidesWith(level.leftwallHitbox)) {
-//                    player.x = level.leftwallHitbox.x + level.leftwallHitbox.width
-//                }
-//            }
-//            if (views.input.keys[Key.RIGHT]) {
-//                player.x += player.moveSpeed * dt.seconds
-//                if (player.x > views.virtualWidth - player.width - 50) player.x = views.virtualWidth - player.width - 30.0
-//                if (player.collidesWith(level.rightwallHitbox)) {
-//                    player.x = level.rightwallHitbox.x - player.width
-//                }
-//            }
-//            if (views.input.keys[Key.SPACE] && !player.jumping) {
-//                player.jumping = true
-//                velocityY = -1500.0
-//                launch {
-//                    player.konaSound()
-//                }
-//            }
-//        }
     }
 
     private fun checkCollisions() {
@@ -409,6 +389,7 @@ class GameScene : Scene() {
                 playerHit = true
                 player.loseHealth()
                 launch {
+                    player.hurtSound()
                     delay(1.seconds)
                     playerHit = false
                 }
@@ -429,15 +410,16 @@ class GameScene : Scene() {
             player.x = level.leftwallHitbox.x + player.width * 2
         }
         if (player.collidesWith(coin)) {
+            launch {
             coin.checkCollisions(player)
             points.text = "Coins left: ${coin.coinCounter}"
-
-
+            }
         }
         for (goal in level.goalHitboxes) {
             if (player.collidesWith(goal) && x == 0 && coin.coinCounter == 0) {
                 x = 1
                 launch {
+                    player.doorSound()
                     levelchanger(0)
                 }
             }

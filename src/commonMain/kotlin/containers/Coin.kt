@@ -1,6 +1,8 @@
 package containers
 
+import com.soywiz.korau.sound.*
 import com.soywiz.korge.view.*
+import com.soywiz.korio.file.std.*
 import loadImage
 
 class Coin: Container()  {
@@ -35,6 +37,24 @@ class Coin: Container()  {
 
         createCoin(160, 475)
     }
+    suspend fun level3_coins() {
+        createCoin(40, 1100)
+        createCoin(290, 1100)
+
+        createCoin(40, 900)
+
+        createCoin(70, 750)
+
+        createCoin(290, 600)
+        createCoin(290, 650)
+
+        createCoin(165, 475)
+
+        createCoin(290, 200)
+
+        createCoin(40, 100)
+        createCoin(40, 150)
+    }
 
     /*suspend fun load(coordinates: Array<Pair<Int, Int>>) {
         println(coordinates.size)
@@ -68,10 +88,12 @@ class Coin: Container()  {
         coinHitboxes[coinName] = coinHitbox
     }
 
-    fun checkCollisions(player: View) {
+    suspend fun checkCollisions(player: View) {
+        val coinSound = resourcesVfs["sfx/coin.wav"].readSound()
         for ((coinName, coinHitbox) in coinHitboxes) {
 
             if (player.collidesWith(coinHitbox)) {
+                coinSound.play()
                 val coinBitmap = coinBitmaps[coinName]
                 coinBitmap?.removeFromParent()
                 points++
@@ -82,7 +104,6 @@ class Coin: Container()  {
                 coinBitmaps.remove(coinName)
                 coinHitboxes.remove(coinName)
                 break
-
             }
         }
     }

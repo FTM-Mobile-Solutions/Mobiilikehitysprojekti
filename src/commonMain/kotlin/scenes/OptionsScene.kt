@@ -8,10 +8,12 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import containers.*
 import kotlinx.coroutines.*
 
 class OptionsScene : Scene() {
     private lateinit var bg: Image
+    private lateinit var sound: Scenesound
     private lateinit var tune: SoundChannel
     private lateinit var back: Text
     private lateinit var info1: Text
@@ -22,7 +24,7 @@ class OptionsScene : Scene() {
     private lateinit var info6: Text
     private lateinit var info7: Text
     override suspend fun SContainer.sceneInit() {
-
+        sound = Scenesound()
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             centerOnStage()
@@ -85,6 +87,7 @@ class OptionsScene : Scene() {
             font = gameFont
         }
         back.onClick {
+            sound.navSound()
             sceneContainer.changeTo<MainScene>()
         }
     }
@@ -116,8 +119,8 @@ class OptionsScene : Scene() {
             val info3Tween = async { info3.tween(info3::alpha[0.0])}
             val info4Tween = async { info4.tween(info4::alpha[0.0])}
             val info5Tween = async { info5.tween(info5::alpha[0.0])}
-            val info6Tween = async { info4.tween(info4::alpha[1.0])}
-            val info7Tween = async { info5.tween(info5::alpha[1.0])}
+            val info6Tween = async { info6.tween(info6::alpha[0.0])}
+            val info7Tween = async { info7.tween(info7::alpha[0.0])}
             awaitAll(tuneTween, backTween, info1Tween, info2Tween, info3Tween, info4Tween, info5Tween, info6Tween, info7Tween)
         }
         tune.stop()

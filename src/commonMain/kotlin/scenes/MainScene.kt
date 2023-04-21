@@ -10,10 +10,12 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import containers.*
 import kotlinx.coroutines.*
 
 class MainScene : Scene() {
     private var clicked = false
+    private lateinit var sound: Scenesound
     private lateinit var bg: Image
     private lateinit var title: Text
     private lateinit var playButton: Image
@@ -22,6 +24,7 @@ class MainScene : Scene() {
 
     override suspend fun SContainer.sceneInit() {
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
+        sound = Scenesound()
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             centerOnStage()
             smoothing = false
@@ -30,13 +33,14 @@ class MainScene : Scene() {
         playButton = image(resourcesVfs["miscellaneous/startbutton.png"].readBitmap()) {
             //position(views.virtualWidth/2, views.virtualHeight/2)
             centerOnStage()
+            y += 25
             smoothing = false
             alpha = 0.0
         }
         title = text("ArthuR", textSize = 104.0) {
             position(50, 625)
             smoothing = false
-            tint = Colors.WHITE
+            tint = Colors.GOLD
             font = gameFont
             alpha = 0.0
         }
@@ -47,10 +51,12 @@ class MainScene : Scene() {
             alpha = 0.0
         }
         playButton.onClick {
+            sound.navSound()
             clicked = true
             sceneContainer.changeTo<GameScene>()
         }
         optionsButton.onClick {
+            sound.navSound()
             sceneContainer.changeTo<OptionsScene>()
         }
     }

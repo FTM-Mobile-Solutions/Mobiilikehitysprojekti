@@ -10,15 +10,18 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import containers.*
 import kotlinx.coroutines.*
 
 class GameOver: Scene() {
+    private lateinit var sound: Scenesound
     private lateinit var bg: Image
     private lateinit var go: Image
     private lateinit var playAgainText: Text
     private lateinit var mainMenuText: Text
     private lateinit var gtune: SoundChannel
     override suspend fun SContainer.sceneInit() {
+        sound = Scenesound()
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         //tune = resourcesVfs["gameover.wav"].readMusic().play()
         //tune.volume = 0.1
@@ -55,10 +58,12 @@ class GameOver: Scene() {
         }
 
         playAgainText.onClick {
+            sound.navSound()
             sceneContainer.changeTo<GameScene>()
         }
 
         mainMenuText.onClick {
+            sound.navSound()
             sceneContainer.changeTo<MainScene>()
         }
     }
@@ -77,7 +82,7 @@ class GameOver: Scene() {
     override suspend fun sceneBeforeLeaving() {
         coroutineScope {
         val bgTween = async {  bg.tween(bg::alpha[0.0]) }
-        val goTween = async {  go.tween(go::alpha[0.0], go::scale[0.0]) }
+        val goTween = async {  go.tween(go::alpha[0.0]) }
         val playAgainTween = async {  playAgainText.tween(playAgainText::alpha[0.0]) }
         val mainMenuTween = async {  mainMenuText.tween(mainMenuText::alpha[0.0]) }
         val gtuneTween = async {  sceneContainer.tween(gtune::volume[0.0]) }

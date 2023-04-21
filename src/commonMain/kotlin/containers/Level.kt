@@ -119,7 +119,6 @@ class Level : Container() {
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
-        //createstart(90.0, 1315.0)
     }
 
     suspend fun level2() {
@@ -138,7 +137,6 @@ class Level : Container() {
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
-        //createstart(90.0, 1315.0)
     }
     suspend fun level3() {
         state = State.LEVEL_3
@@ -151,12 +149,11 @@ class Level : Container() {
         createplatform_small(235, 550)
         createplatform_small(40, 400)
         createplatform(150, 300)
-        createplatform(200, 100)
+        createplatform(200, 165)
         val addGoal = platformHitboxestop.last()
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
-        //createstart(90.0, 1315.0)
     }
 
     suspend fun creategoal(gx:Double, gy:Double) {
