@@ -10,8 +10,10 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import kotlinx.coroutines.*
 
 class MainScene : Scene() {
+    private var clicked = false
     private lateinit var bg: Image
     private lateinit var title: Text
     private lateinit var playButton: Image
@@ -23,7 +25,7 @@ class MainScene : Scene() {
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             centerOnStage()
             smoothing = false
-            alpha = 0.0
+            alpha = 1.0
         }
         playButton = image(resourcesVfs["miscellaneous/startbutton.png"].readBitmap()) {
             //position(views.virtualWidth/2, views.virtualHeight/2)
@@ -45,6 +47,7 @@ class MainScene : Scene() {
             alpha = 0.0
         }
         playButton.onClick {
+            clicked = true
             sceneContainer.changeTo<GameScene>()
         }
         optionsButton.onClick {
@@ -55,19 +58,26 @@ class MainScene : Scene() {
         super.sceneAfterInit()
         tune = resourcesVfs["sfx/gamesong.wav"].readMusic().playForever()
         tune.volume = 0.0
-        sceneContainer.tween(tune::volume[0.2], time = 1.5.seconds)
-        bg.tween(bg::alpha[1.0], time = 1.seconds)
-        title.tween(title::alpha[1.0], time = 1.seconds)
-        playButton.tween(playButton::alpha[1.0], time = 1.seconds)
-        optionsButton.tween(optionsButton::alpha[1.0], time = 1.seconds)
+        coroutineScope {
+            val sceneContainerTween = async {sceneContainer.tween(tune::volume[0.2])}
+            val bgTween = async {bg.tween(bg::alpha[1.0])}
+            val titleTween = async {title.tween(title::alpha[1.0])}
+            val playButtonTween = async {playButton.tween(playButton::alpha[1.0])}
+            val optionsButtonTween = async {optionsButton.tween(optionsButton::alpha[1.0])}
+            awaitAll(sceneContainerTween, bgTween, titleTween, playButtonTween, optionsButtonTween)
+        }
     }
 
     override suspend fun sceneBeforeLeaving() {
-        playButton.tween(playButton::alpha[0.0])
-        title.tween(title::alpha[0.0])
-        optionsButton.tween(optionsButton::alpha[0.0])
-        bg.tween(bg::alpha[0.0], time = .5.seconds)
-        sceneContainer.tween(tune::volume[0.0], time = .4.seconds)
+        coroutineScope {
+            val titleTween = async {title.tween(title::alpha[0.0])}
+            val playButtonTween = async {playButton.tween(playButton::alpha[0.0])}
+            val optionsButtonTween = async {optionsButton.tween(optionsButton::alpha[0.0])}
+            awaitAll(titleTween, playButtonTween, optionsButtonTween)
+            if (clicked) {
+                bg.tween(bg::alpha[0.0])
+            }
+        }
         tune.stop()
         super.sceneBeforeLeaving()
     }

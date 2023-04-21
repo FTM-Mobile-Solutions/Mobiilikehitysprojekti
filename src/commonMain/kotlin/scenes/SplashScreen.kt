@@ -8,6 +8,7 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import kotlinx.coroutines.*
 
 class SplashScreen : Scene() {
     private lateinit var bg: Image
@@ -37,13 +38,19 @@ class SplashScreen : Scene() {
     }
 
     override suspend fun sceneAfterInit() {
-        bg.tween(bg::alpha[1.0], time = 1.seconds)
-        splash.tween(splash::alpha[1.0])
-        splashpresent.tween(splashpresent::alpha[1.0])
+        coroutineScope {
+            val bgTween = async {bg.tween(bg::alpha[1.0]) }
+            val splashTween = async {splash.tween(splash::alpha[1.0]) }
+            val splashpresentTween = async {splashpresent.tween(splashpresent::alpha[1.0]) }
+            awaitAll(bgTween, splashTween, splashpresentTween)
+        }
         delay(2.seconds)
-        splash.tween(splash::alpha[0.0])
-        splashpresent.tween(splashpresent::alpha[0.0])
-        bg.tween(bg::alpha[0.0], time = .5.seconds)
+        coroutineScope {
+            val bgTween = async {bg.tween(bg::alpha[0.0]) }
+            val splashTween = async {splash.tween(splash::alpha[0.0]) }
+            val splashpresentTween = async {splashpresent.tween(splashpresent::alpha[0.0]) }
+            awaitAll(bgTween, splashTween, splashpresentTween)
+        }
         sceneContainer.changeTo<MainScene>()
     }
 

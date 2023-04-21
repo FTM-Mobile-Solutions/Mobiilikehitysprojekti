@@ -119,6 +119,7 @@ class Level : Container() {
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
+        //createstart(90.0, 1315.0)
     }
 
     suspend fun level2() {
@@ -137,6 +138,7 @@ class Level : Container() {
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
+        //createstart(90.0, 1315.0)
     }
     suspend fun level3() {
         state = State.LEVEL_3
@@ -154,6 +156,7 @@ class Level : Container() {
         val goalX = addGoal.x + 16
         val goalY = addGoal.y - 96
         creategoal(goalX, goalY)
+        //createstart(90.0, 1315.0)
     }
 
     suspend fun creategoal(gx:Double, gy:Double) {
@@ -168,6 +171,15 @@ class Level : Container() {
             position(gx, gy)
         }
         goalHitboxes.add(goalHitbox)
+    }
+
+    suspend fun createstart(gx:Double, gy:Double) {
+        goal = loadImage("tiles/goal.png")
+        val goalimage = image(goal) {
+            smoothing = false
+            tint = getColor()
+            position(gx, gy)
+        }
     }
 
     suspend fun createplatform(gx:Int, gy:Int) {

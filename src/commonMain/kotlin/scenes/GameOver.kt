@@ -10,6 +10,7 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import kotlinx.coroutines.*
 
 class GameOver: Scene() {
     private lateinit var bg: Image
@@ -74,11 +75,14 @@ class GameOver: Scene() {
     }
 
     override suspend fun sceneBeforeLeaving() {
-        bg.tween(bg::alpha[0.0], time = .4.seconds)
-        go.tween(go::alpha[0.0], go::scale[0.0], time = .4.seconds)
-        playAgainText.tween(playAgainText::alpha[0.0], time = .4.seconds)
-        mainMenuText.tween(mainMenuText::alpha[0.0], time = .4.seconds)
-        sceneContainer.tween(gtune::volume[0.0], time = .4.seconds)
+        coroutineScope {
+        val bgTween = async {  bg.tween(bg::alpha[0.0]) }
+        val goTween = async {  go.tween(go::alpha[0.0], go::scale[0.0]) }
+        val playAgainTween = async {  playAgainText.tween(playAgainText::alpha[0.0]) }
+        val mainMenuTween = async {  mainMenuText.tween(mainMenuText::alpha[0.0]) }
+        val gtuneTween = async {  sceneContainer.tween(gtune::volume[0.0]) }
+            awaitAll(bgTween, goTween, playAgainTween, mainMenuTween, gtuneTween)
+        }
         gtune.stop()
         super.sceneBeforeLeaving()
     }

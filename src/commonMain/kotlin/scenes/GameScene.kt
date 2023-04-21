@@ -106,11 +106,15 @@ class GameScene : Scene() {
     }
 
     private suspend fun levelchanger(levelnum: Int) {
+        if (levelnum == 4) {
+            sceneContainer.changeTo<FinalScene>()
+        }
         if (levelnum == 0) {
             player.position(120, 1370)
             level.leveldestroyer()
             enemy.enemydestroyer()
             level.levelinit()
+            level.createstart(90.0, 1315.0)
             lvl++
             println("Changed to level $lvl")
             levelchanger(lvl)
@@ -136,9 +140,6 @@ class GameScene : Scene() {
                 enemy.createBat(46, 725)
                 enemy.createBat(46, 175)
                 level.level3()
-            }
-            4 -> {
-                sceneContainer.changeTo<FinalScene>()
             }
         }
     }

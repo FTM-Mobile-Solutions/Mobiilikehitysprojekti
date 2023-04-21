@@ -7,6 +7,7 @@ import com.soywiz.korim.color.*
 import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korio.file.std.*
+import kotlinx.coroutines.*
 
 class FinalScene : Scene() {
     private lateinit var bg: Image
@@ -19,9 +20,9 @@ class FinalScene : Scene() {
             smoothing = false
             alpha = 0.0
         }
-        mainMenuText = text("Hyvin pelattu!", textSize = 24.0) {
+        mainMenuText = text("Congratulations!", textSize = 32.0) {
             centerOnStage()
-            tint = Colors.RED
+            tint = Colors.WHITE
             alpha = 0.0
             font = gameFont
         }
@@ -29,13 +30,19 @@ class FinalScene : Scene() {
 
     override suspend fun sceneAfterInit() {
         super.sceneAfterInit()
-        bg.tween(bg::alpha[1.0], time = 1.seconds)
-        mainMenuText.tween(mainMenuText::alpha[1.0], time = 1.seconds)
+        coroutineScope {
+        val bgTween = async { bg.tween(bg::alpha[1.0]) }
+        val mainmenuTween = async { mainMenuText.tween(mainMenuText::alpha[1.0]) }
+            awaitAll(bgTween, mainmenuTween)
+        }
     }
 
     override suspend fun sceneBeforeLeaving() {
-        bg.tween(bg::alpha[0.0], time = .5.seconds)
-        mainMenuText.tween(mainMenuText::alpha[0.0], time = .4.seconds)
+        coroutineScope {
+            val bgTween = async { bg.tween(bg::alpha[0.0]) }
+            val mainmenuTween = async { mainMenuText.tween(mainMenuText::alpha[0.0]) }
+            awaitAll(bgTween, mainmenuTween)
+        }
         super.sceneBeforeLeaving()
     }
 }
