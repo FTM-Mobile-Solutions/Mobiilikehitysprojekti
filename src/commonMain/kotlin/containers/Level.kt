@@ -1,6 +1,5 @@
-package container
+package containers
 
-import container.entities.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.*
 import com.soywiz.korim.color.*

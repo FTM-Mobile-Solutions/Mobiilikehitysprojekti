@@ -1,10 +1,10 @@
 package scenes
 
-import container.Coin
-import container.entities.Enemy
-import container.Health
-import container.Level
-import container.entities.Player
+import containers.Coin
+import containers.Enemy
+import containers.Health
+import containers.Level
+import containers.Player
 import com.soywiz.klock.*
 import com.soywiz.kmem.*
 import com.soywiz.korau.sound.*
@@ -99,13 +99,15 @@ class GameScene : Scene() {
         tune = resourcesVfs["sfx/gamesong.wav"].readMusic().playForever()
         tune.volume = 0.0
         sceneContainer.tween(tune::volume[0.8], time = 1.5.seconds)
-        info.tween(info::alpha[1.0], time = 1.seconds)
+        info.tween(info::alpha[1.0], time = .3.seconds)
+        delay(2.seconds)
         info.tween(info::alpha[0.0], time = 3.seconds)
         player.live()
     }
 
     private suspend fun levelchanger(levelnum: Int) {
         if (levelnum == 0) {
+            player.position(120, 1370)
             level.leveldestroyer()
             enemy.enemydestroyer()
             level.levelinit()
@@ -113,7 +115,6 @@ class GameScene : Scene() {
             println("Changed to level $lvl")
             levelchanger(lvl)
             x = 0
-            player.position(120, 1370)
 
         }
         when (levelnum) {
@@ -347,7 +348,7 @@ class GameScene : Scene() {
             player.jumping = true
             velocityY = -player.jumpForce
         }
-//        if (player.state == entities.Player.State.MOVING || player.state == entities.Player.State.HURT) {
+//        if (player.state == entities.containers.Player.State.MOVING || player.state == entities.containers.Player.State.HURT) {
 //            if (views.input.keys[Key.LEFT]) {
 //                player.x -= player.moveSpeed * dt.seconds
 //                if (player.x < 50) player.x = 30.0

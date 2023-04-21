@@ -1,4 +1,4 @@
-package container.entities
+package containers
 
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.*

@@ -1,4 +1,4 @@
-package container
+package containers
 
 import com.soywiz.korge.view.*
 import loadImage
@@ -42,7 +42,7 @@ class Coin: Container()  {
         for ((gx, gy) in coordinates) {
             createCoin(gx, gy)
         }
-        val coin = Container.Coin()
+        val coin = Container.containers.Coin()
         val coordinates = arrayOf(
             Pair(100, 200),
             Pair(500, 300),
