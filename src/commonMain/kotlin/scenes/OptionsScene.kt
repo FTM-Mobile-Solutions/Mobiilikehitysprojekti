@@ -44,7 +44,7 @@ class OptionsScene : Scene() {
             alpha = 0.0
             font = gameFont
         }
-        info2 = text("Swipe or tap the preferred side.", textSize = 24.0) {
+        info2 = text("Press the preferred side.", textSize = 24.0) {
             centerOnStage()
             tint = Colors.GHOSTWHITE
             y -= 75
@@ -65,7 +65,7 @@ class OptionsScene : Scene() {
             alpha = 0.0
             font = gameFont
         }
-        info5 = text("tap or swipe from the left side.", textSize = 24.0) {
+        info5 = text("press right side of the screen.", textSize = 24.0) {
             centerOnStage()
             tint = Colors.GHOSTWHITE
             y += 75
