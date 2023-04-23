@@ -12,12 +12,12 @@ import containers.*
 import kotlinx.coroutines.*
 
 class FinalScene : Scene() {
-    private lateinit var sound: Scenesound
+    private lateinit var sound: SceneSound
     private lateinit var bg: Image
     private lateinit var mainMenuText: Text
     private lateinit var returnText: Text
     override suspend fun SContainer.sceneInit() {
-        sound = Scenesound()
+        sound = SceneSound()
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             tint = Colors.LIGHTSEAGREEN

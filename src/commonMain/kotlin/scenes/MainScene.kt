@@ -1,6 +1,5 @@
 package scenes
 
-import com.soywiz.klock.*
 import com.soywiz.korau.sound.*
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
@@ -15,7 +14,7 @@ import kotlinx.coroutines.*
 
 class MainScene : Scene() {
     private var clicked = false
-    private lateinit var sound: Scenesound
+    private lateinit var sound: SceneSound
     private lateinit var bg: Image
     private lateinit var title: Text
     private lateinit var playButton: Image
@@ -24,7 +23,7 @@ class MainScene : Scene() {
 
     override suspend fun SContainer.sceneInit() {
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
-        sound = Scenesound()
+        sound = SceneSound()
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             centerOnStage()
             smoothing = false

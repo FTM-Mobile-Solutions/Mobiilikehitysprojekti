@@ -14,14 +14,14 @@ import containers.*
 import kotlinx.coroutines.*
 
 class GameOver: Scene() {
-    private lateinit var sound: Scenesound
+    private lateinit var sound: SceneSound
     private lateinit var bg: Image
     private lateinit var go: Image
     private lateinit var playAgainText: Text
     private lateinit var mainMenuText: Text
     private lateinit var gtune: SoundChannel
     override suspend fun SContainer.sceneInit() {
-        sound = Scenesound()
+        sound = SceneSound()
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         //tune = resourcesVfs["gameover.wav"].readMusic().play()
         //tune.volume = 0.1

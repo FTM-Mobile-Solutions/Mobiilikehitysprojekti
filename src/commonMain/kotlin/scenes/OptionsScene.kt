@@ -13,7 +13,7 @@ import kotlinx.coroutines.*
 
 class OptionsScene : Scene() {
     private lateinit var bg: Image
-    private lateinit var sound: Scenesound
+    private lateinit var sound: SceneSound
     private lateinit var tune: SoundChannel
     private lateinit var back: Text
     private lateinit var info1: Text
@@ -24,7 +24,7 @@ class OptionsScene : Scene() {
     private lateinit var info6: Text
     private lateinit var info7: Text
     override suspend fun SContainer.sceneInit() {
-        sound = Scenesound()
+        sound = SceneSound()
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
         bg = image(resourcesVfs["tiles/bg.png"].readBitmap()) {
             centerOnStage()

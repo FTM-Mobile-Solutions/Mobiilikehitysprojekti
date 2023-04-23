@@ -1,6 +1,7 @@
 
 import com.soywiz.korge.*
 import com.soywiz.korge.scene.*
+import com.soywiz.korim.atlas.*
 import com.soywiz.korim.color.*
 import com.soywiz.korinject.*
 import com.soywiz.korma.geom.*

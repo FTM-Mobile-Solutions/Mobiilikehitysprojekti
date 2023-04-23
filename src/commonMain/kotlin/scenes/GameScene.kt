@@ -32,6 +32,9 @@ class GameScene : Scene() {
     private lateinit var info: Text
     private var lvl = 0
     private var x = 0
+    private var y = 0
+    private var pressing = false
+    private var justReleased = false
     private var limit = 0
     private var gravity = 3500.0
     private var velocityY = 0.0
@@ -72,11 +75,12 @@ class GameScene : Scene() {
 
         levelchanger(lvl)
 
-        touchPad = solidRect(width = 90, height = views.virtualHeight * 2) {
+        touchPad = solidRect(width = views.actualWidth / 2, height = views.virtualHeight * 2) {
+            tint = Colors.GREEN
             alpha = 0.0
-            position(90, 400)
+            position(0, 400)
         }
-        touchPad2 = solidRect(width = 90, height = views.virtualHeight * 2) {
+        touchPad2 = solidRect(width = views.actualWidth / 2, height = views.virtualHeight * 2) {
             alpha = 0.0
             position(180, 400)
         }
@@ -95,7 +99,6 @@ class GameScene : Scene() {
         }
         addUpdater { update(it) }
     }
-
     override suspend fun sceneAfterInit() {
         super.sceneAfterInit()
         tune = resourcesVfs["sfx/gamesong.wav"].readMusic().playForever()
@@ -107,7 +110,6 @@ class GameScene : Scene() {
         info.tween(info::alpha[0.0], time = 3.seconds)
         player.live()
     }
-
     private suspend fun levelchanger(levelnum: Int) {
         if (levelnum == 4) {
             sceneContainer.changeTo<FinalScene>()
@@ -148,7 +150,6 @@ class GameScene : Scene() {
             }
         }
     }
-
     private fun update(dt: TimeSpan) {
         if (gameOver) {
             return // Stop updating the game
@@ -158,12 +159,10 @@ class GameScene : Scene() {
         checkCamerapos()
         enemyMovement(dt)
     }
-
     private suspend fun stop() {
         gameOver = true
         sceneContainer.changeTo<GameOver>()
     }
-
     private fun enemyMovement(dt: TimeSpan) {
         val enemyVelocityX = enemy.getVelocityX()
         val enemyVelocityY = enemy.getVelocityY()
@@ -182,7 +181,6 @@ class GameScene : Scene() {
             enemy.setVelocityY(-enemyVelocityY)
         }
     }
-
     private fun checkCamerapos() {
         camera.y = -player.y + sceneHeight / 2
         if (player.y > 1130.0) {
@@ -191,92 +189,76 @@ class GameScene : Scene() {
             camera.y = 400.0
         }
     }
-
     private fun checkInput(dt: TimeSpan) {
         velocityY += gravity * dt.seconds
         player.y += velocityY * dt.seconds
         velocityY = minOf(velocityY, 1000.0)
 
-        var touchStartPos = Point()
-        var touchEndPos = Point()
-        var jumped = false
-
-        fun setEPos() {
-            touchEndPos = views.globalMouseXY
+        touchPad.onDown {
+            pressing = true
+            facingRight = false
+            player.jumpForce = 500.0
+            player.jumpDistance = 100.0
         }
-
-        fun getEPos(): Point {
-            return touchEndPos
-        }
-
-        fun setPos() {
-            touchStartPos = views.globalMouseXY
-        }
-
-        fun getPos(): Point {
-            return touchStartPos
-        }
-        touchPad.onDown outer@{
-                setPos()
-                //setEPos()
-        }
-        touchPad.onMouseDrag {
-            if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
-                player.jumping = true
-                facingRight = true
-                launch { player.idle_right() }
-                //var pos = getPos()
-                // Calculate length of mouse drag
-                var dragLength = getEPos().distanceTo(getPos())
-                if (dragLength.isAlmostZero()) {
-                    println("drag it")
-                //return@onMouseDrag
+        if (pressing && y == 0 && !player.jumping && !facingRight) {
+            player.jumping = true
+            launch { player.idle_left() }
+            player.jumpForce += 250 * dt.seconds
+            player.jumpDistance += 100 * dt.seconds
+            println(player.jumpForce)
+            if (player.jumpForce >= 1250) {
+                player.jumpForce = 1250.0
+                if (player.jumpForce == 1250.0 && limit == 0) {
+                    limit = 1
+                    launch { player.limitSound() }
                 }
-                // Adjust jumpPower and jumpDistance based on drag length
-                player.jumpForce = 500 + (dragLength / 2.0).coerceAtMost(750.0)
-                player.jumpDistance = 100 + (dragLength / 4.0).coerceAtMost(200.0)
-                println("Jump Power: ${player.jumpForce}, Jump Distance: ${player.jumpDistance}")
-                jumped = true
             }
         }
-
-            /*touchPad.onUp {
-                touchEndPos = views.globalMouseXY
-            }*/
-
-        touchPad.onUpOutside {
-            if (!player.jumping && jumped) {
-                player.jumping = true
-                velocityY = -player.jumpForce
-            }
-            jumped = false
+        touchPad.onUp {
+            y = 1
+            facingRight = false
+            justReleased = true
+            pressing = false
+        }
+        if (justReleased && y == 1 && !player.jumping && !facingRight) {
+            y = 0
+            player.jumping = true
+            velocityY = -player.jumpForce
+            launch { player.jumpSound() }
         }
 
-        touchPad2.onMouseDrag {
-            if (views.input.mouseButtonPressed(MouseButton.LEFT) && !player.jumping) {
-                player.jumping = true
-                facingRight = false
-                launch { player.idle_left() }
-                //var pos = getPos()
-                // Calculate length of mouse drag
-                var dragLength = getEPos().distanceTo(getPos())
-                if (dragLength.isAlmostZero()) {
-                    println("drag it")
-                    //return@onMouseDrag
+        touchPad2.onDown {
+            facingRight = true
+            pressing = true
+            player.jumpForce = 500.0
+            player.jumpDistance = 100.0
+        }
+        if (pressing && y == 0 && !player.jumping && facingRight) {
+            player.jumping = true
+            launch { player.idle_right() }
+            facingRight = true
+            player.jumpForce += 250 * dt.seconds
+            player.jumpDistance += 100 * dt.seconds
+            println(player.jumpForce)
+            if (player.jumpForce >= 1250) {
+                player.jumpForce = 1250.0
+                if (player.jumpForce == 1250.0 && limit == 0) {
+                    limit = 1
+                    launch { player.limitSound() }
                 }
-                // Adjust jumpPower and jumpDistance based on drag length
-                player.jumpForce = 500 + (dragLength / 2.0).coerceAtMost(750.0)
-                player.jumpDistance = 100 + (dragLength / 4.0).coerceAtMost(200.0)
-                println("Jump Power: ${player.jumpForce}, Jump Distance: ${player.jumpDistance}")
-                jumped = true
             }
         }
-        touchPad2.onUpOutside {
-            if (!player.jumping && jumped) {
-                player.jumping = true
-                velocityY = -player.jumpForce
-            }
-            jumped = false
+        touchPad2.onUp {
+            facingRight = true
+            y = 1
+            justReleased = true
+            pressing = false
+        }
+        if (justReleased && y == 1 && !player.jumping && facingRight) {
+            y = 0
+            player.jumping = true
+            velocityY = -player.jumpForce
+            launch { player.jumpSound() }
         }
 
         if (views.input.keys.justPressed(Key.RIGHT) && !player.jumping) {
@@ -302,9 +284,6 @@ class GameScene : Scene() {
             if (player.jumpDistance >= 350) {
                 player.jumpDistance = 350.0
             }
-            println(player.jumpForce)
-            //println("force:"+player.jumpForce)
-            //println("distance:"+player.jumpDistance)
         }
 
         if (views.input.keys.justReleased(Key.RIGHT) && !player.jumping) {
@@ -344,8 +323,6 @@ class GameScene : Scene() {
             }
             if (player.jumpDistance >= 350)
                 player.jumpDistance = 350.0
-            //println("force:"+player.jumpForce)
-            //println("distance:"+player.jumpDistance)
         }
 
         if (views.input.keys.justReleased(Key.LEFT) && !player.jumping) {
@@ -354,7 +331,6 @@ class GameScene : Scene() {
             launch { player.jumpSound() }
         }
     }
-
     private fun checkCollisions() {
         val playerTop = player.y
         val playerBottom = player.y + player.height
