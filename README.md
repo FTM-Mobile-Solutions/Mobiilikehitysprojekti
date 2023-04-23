@@ -9,3 +9,5 @@ pelin uudelleen. Pelissä on 3 tasoa, jotka vaikenevat mitä pidemmälle pääse
 Peliässä on toimivat kontrollit tietokoneelle sekä puhelimelle.
 
 Tässä demovideo pelin läpipeluusta:
+
+Kaikki pelin grafiikat ja äänet ovat ilmaisia resursseja ja eivätkä vaadi tunnustusta
