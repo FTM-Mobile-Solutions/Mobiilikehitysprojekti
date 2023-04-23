@@ -116,6 +116,7 @@ class GameScene : Scene() {
             player.position(120, 1370)
             level.leveldestroyer()
             enemy.enemydestroyer()
+            enemy.enemydestroyer()
             level.levelinit()
             level.createstart(90.0, 1315.0)
             lvl++
