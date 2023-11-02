@@ -46,6 +46,10 @@ class GameScene : Scene() {
     private lateinit var touchPad: SolidRect
     private lateinit var touchPad2: SolidRect
 
+    /*onko äijien proujekt
+    on se kyllä
+     */
+
     override suspend fun SContainer.sceneInit() {
         sceneContainer.alpha = 0.0
         val gameFont = TtfFont(resourcesVfs["font/dpcomic.ttf"].readAll())
